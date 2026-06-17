@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Casamento Premium</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#b89b5e">
+
+    <style>
+        :root {
+            --primary: #c5a880;
+            --primary-light: #f5f0e6;
+            --primary-dark: #7c6443;
+            --accent: #d4af37;
+            --surface: #ffffff;
+            --bg-body: #fbf9f6;
+            
+            /* Glassmorphism Refinado */
+            --bg-glass: rgba(255, 255, 255, 0.75);
+            --border-glass: rgba(197, 168, 128, 0.18);
+            
+            --text-main: #232120;
+            --text-muted: #8a827c;
+            
+            --success: #2e7d32;
+            --warning: #ed6c02;
+            --danger: #d32f2f;
+            
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            
+            --shadow-sm: 0 4px 20px rgba(184, 144, 88, 0.04);
+            --shadow-md: 0 12px 40px rgba(184, 144, 88, 0.08);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(245, 240, 230, 0.6) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(197, 168, 128, 0.12) 0px, transparent 50%);
+            color: var(--text-main);
+            overflow-x: hidden;
+            padding-bottom: 80px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background: linear-gradient(135deg, #161514 0%, #2c2825 100%);
+            color: white;
+            text-align: center;
+            padding: 70px 20px;
+            position: relative;
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        header h1 {
+            font-size: 2.4rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        nav {
+            display: flex;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: rgba(251, 249, 246, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glass);
+            scrollbar-width: none;
+            padding: 0 10px;
+        }
+
+        nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        nav button {
+            flex: 1;
+            min-width: 110px;
+            border: none;
+            background: none;
+            padding: 20px 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            position: relative;
+            font-weight: 500;
+        }
+
+        nav button.active {
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        nav button::after {
+            content: "";
+            position: absolute;
+            left: 30%;
+            right: 30%;
+            bottom: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 4px 4px 0 0;
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        nav button.active::after {
+            transform: scaleX(1);
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            display: none;
+        }
+
+        section.active {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Bento Grid Style Card */
+        .card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(184, 144, 88, 0.12);
+            border-color: rgba(197, 168, 128, 0.3);
+        }
+
+        .card h3 {
+            color: var(--primary-dark);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-left: 4px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(197, 168, 128, 0.25);
+            margin-top: 8px;
+            outline: none;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-dark);
+            background: var(--surface);
+            box-shadow: 0 0 0 4px rgba(197, 168, 128, 0.15);
+        }
+
+        /* Buttons Premium */
+        button {
+            width: 100%;
+            border: none;
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #2c2825 0%, #161514 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #3d3733 0%, #232120 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #d3b68e 0%, #866d4a 100%);
+        }
+
+        .btn-outline {
+            width: auto;
+            padding: 10px 18px;
+            color: var(--primary-dark);
+            background: transparent;
+            border: 1px solid rgba(197, 168, 128, 0.4);
+            box-shadow: none;
+            font-size: 0.85rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-danger-light {
+            width: auto;
+            padding: 10px 18px;
+            background: rgba(213, 47, 47, 0.06);
+            color: var(--danger);
+            box-shadow: none;
+            font-size: 0.85rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .btn-danger-light:hover {
+            background: var(--danger);
+            color: white;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Dashboard Bento Grid layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .stat {
+            text-align: left;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.45);
+            border: 1px solid rgba(197, 168, 128, 0.1);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .stat h2 {
+            color: var(--text-main);
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 4px;
+        }
+
+        .stat p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Contador Elegant */
+        #contador {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        #contador h1 {
+            font-size: 4.5rem;
+            font-weight: 200;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+
+        #contador p {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Listas Modernas */
+        ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 18px 8px;
+            border-bottom: 1px solid rgba(197, 168, 128, 0.12);
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 6px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .confirmado, .pago { background: rgba(46, 125, 50, 0.08); color: var(--success); }
+        .pendente, .parcial { background: rgba(237, 108, 2, 0.08); color: var(--warning); }
+        .recusado { background: rgba(211, 47, 47, 0.08); color: var(--danger); }
+
+        /* Progress bars minimalistas */
+        .progress {
+            height: 6px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(197, 168, 128, 0.15);
+            margin-top: 16px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+            transition: width 1s ease-out;
+        }
+
+        .graph-container {
+            display: flex;
+            height: 8px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: rgba(197, 168, 128, 0.15);
+            margin-top: 24px;
+        }
+
+        .graph-pago { width: 0; background: var(--success); transition: width 1s ease-out; }
+        .graph-pendente { width: 0; background: var(--warning); transition: width 1s ease-out; }
+
+        .alerta {
+            padding: 18px;
+            margin-bottom: 14px;
+            border-left: 3px solid var(--primary);
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            box-shadow: var(--shadow-sm);
+            font-size: 0.95rem;
+        }
+
+        .finance-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .finance-row {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed rgba(197, 168, 128, 0.2);
+            font-size: 0.95rem;
+        }
+
+        .finance-row:last-child {
+            border-bottom: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .grid-half {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* Responsividade Avançada */
+        @media(max-width: 768px) {
+            header { padding: 50px 20px; }
+            header h1 { font-size: 1.8rem; }
+            #contador h1 { font-size: 3.5rem; }
+            .dashboard { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .stat { padding: 16px; }
+            .stat h2 { font-size: 1.5rem; }
+            li { flex-direction: column; align-items: flex-start; gap: 12px; }
+            li div:last-child { width: 100%; display: flex; gap: 8px; }
+            li button { flex: 1; text-align: center; justify-content: center; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app-content">
+        <header>
+            <h1>💍 Organizador de Casamento</h1>
+        </header>
+        
+        <nav>
+            <button class="active" onclick="trocarAba(0)">🏠 Geral</button>
+            <button onclick="trocarAba(1)">👥 Convidados</button>
+            <button onclick="trocarAba(2)">💰 Orçamento</button>
+            <button onclick="trocarAba(3)">📋 Checklist</button>
+            <button onclick="trocarAba(4)">🏢 Fornecedores</button>
+            <button onclick="trocarAba(5)">🔔 Lembretes</button>
+        </nav>
+
+        <main>
+            <section class="active">
+                <div class="grid-half">
+                    <div class="card">
+                        <h3>📅 Informações Básicas</h3>
+                        <div class="form-group">
+                            <label>Data do Evento</label>
+                            <input type="date" id="dataCasamento">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Horário</label>
+                                <input type="time" id="horaCasamento">
+                            </div>
+                            <div class="form-group">
+                                <label>Local</label>
+                                <input id="localCasamento" placeholder="Ex: Capela Real ou Salão Nobre">
+                            </div>
+                        </div>
+                        <button onclick="salvarCasamento()" class="btn-secondary">Salvar Configurações</button>
+                    </div>
+
+                    <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
+                        <h3>⏳ Contagem Regressiva</h3>
+                        <div id="contador"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Resumo Executivo (Dashboard)</h3>
+                    <div class="dashboard">
+                        <div class="stat"><h2 id="dashDias">0</h2><p>Dias Restantes</p></div>
+                        <div class="stat"><h2 id="dashConvidados">0</h2><p>Total Convidados</p></div>
+                        <div class="stat"><h2 id="dashConfirmados">0</h2><p>Confirmados (RSVP)</p></div>
+                        <div class="stat"><h2 id="dashGastos">R$ 0,00</h2><p>Orçamento Contratado</p></div>
+                        <div class="stat"><h2 id="dashChecklist">0%</h2><p>Tarefas Concluídas</p></div>
+                        <div class="stat"><h2 id="dashFornecedores">0</h2><p>Fornecedores Ativos</p></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>💾 Segurança da Informação</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">
+                        Exporte seus dados locais para backup ou transfira para outro dispositivo de forma simples.
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <button onclick="exportarBackup()">Exportar Dados (.JSON)</button>
+                        <div style="position: relative;">
+                            <input type="file" id="arquivoBackup" accept=".json" onchange="importarBackup(event)" style="margin-top: 0; display: none;">
+                            <button onclick="document.getElementById('arquivoBackup').click()" class="btn-secondary">Importar Backup</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="grid-half">
+                    <div class="card">
+                        <h3>👥 Gerenciar Convidado</h3>
+                        <div class="form-group">
+                            <label>Nome do Convidado</label>
+                            <input id="nomeConvidado" placeholder="Nome Completo">
+                        </div>
+                        <div class="form-group">
+                            <label>Status de Confirmação (RSVP)</label>
+                            <select id="statusConvidado">
+                                <option value="pendente">⏳ Aguardando Resposta</option>
+                                <option value="confirmado">✅ Presença Confirmada</option>
+                                <option value="recusado">❌ Não Poderá Comparecer</option>
+                            </select>
+                        </div>
+                        <button onclick="addConvidado()">Adicionar à Lista</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📊 Métricas de RSVP</h3>
+                        <div class="dashboard" style="grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                            <div class="stat"><h2 id="totalConvidados">0</h2><p>Lista Total</p></div>
+                            <div class="stat"><h2 id="totalConfirmados">0</h2><p>Confirmados</p></div>
+                            <div class="stat"><h2 id="totalPendentes">0</h2><p>Pendentes</p></div>
+                            <div class="stat"><h2 id="totalRecusados">0</h2><p>Recusados</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📋 Lista Nominativa</h3>
+                    <input id="pesquisaConvidado" placeholder="🔎 Digite um nome para buscar..." onkeyup="renderConvidados()" style="margin-bottom: 15px;">
+                    <ul id="listaConvidados"></ul>
+                </div>
+            </section>
+
+            <section>
+                <div class="grid-half">
+                    <div class="card">
+                        <h3>💰 Lançar Nova Despesa</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Categoria</label>
+                                <select id="categoria">
+                                    <option>Buffet</option>
+                                    <option>Decoração</option>
+                                    <option>Fotografia</option>
+                                    <option>Música</option>
+                                    <option>Vestido</option>
+                                    <option>Traje do Noivo</option>
+                                    <option>Alianças</option>
+                                    <option>Outros</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Descrição do Item</label>
+                                <input type="text" id="descricao" placeholder="Ex: Entrada do Contrato">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Valor Total (R$)</label>
+                                <input id="valor" type="number" step="0.01" placeholder="0.00">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Valor Pago (R$)</label>
+                                <input id="valorPago" type="number" step="0.01" placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Data de Vencimento</label>
+                            <input id="vencimento" type="date">
+                        </div>
+                        
+                        <button onclick="addItem()">Registrar Despesa</button>
+                    </div>
+
+                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3>📈 Fluxo de Caixa Integrado</h3>
+                            <div class="finance-summary">
+                                <div class="finance-row"><span>Custo Total Contratado</span><strong id="totalInvestido">R$ 0,00</strong></div>
+                                <div class="finance-row"><span>Montante Realizado (Pago)</span><strong id="totalPago" style="color: var(--success);">R$ 0,00</strong></div>
+                                <div class="finance-row"><span>Saldo Devedor Residual</span><strong id="totalPendente" style="color: var(--warning);">R$ 0,00</strong></div>
+                            </div>
+                        </div>
+                        <div class="graph-container">
+                            <div class="graph-pago" id="barraPago"></div>
+                            <div class="graph-pendente" id="barraPendente"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="listaOrcamento" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 5px; width: 100%;"></div>
+            </section>
+
+            <section>
+                <div class="card">
+                    <h3>📋 Planejamento de Metas (Checklist)</h3>
+                    <div style="display: flex; gap: 12px; align-items: flex-end;">
+                        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                            <label>Descrição do Objetivo</label>
+                            <input id="novaTarefa" placeholder="Ex: Degustação do bolo de casamento">
+                        </div>
+                        <button onclick="addChecklist()" style="width: auto; height: 50px; margin-top: 0;">Adicionar</button>
+                    </div>
+                    
+                    <div class="progress">
+                        <div class="progress-bar" id="barraChecklist"></div>
+                    </div>
+                    <div id="textoProgresso" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-align: right;">0%</div>
+                </div>
+
+                <div class="card">
+                    <h3>Tarefas Registradas</h3>
+                    <ul id="listaChecklist"></ul>
+                </div>
+            </section>
+
+            <section>
+                <div class="card">
+                    <h3>🏢 Homologação de Fornecedores</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Razão Social / Nome Fantasia</label>
+                            <input id="fornecedorNome" placeholder="Nome da empresa">
+                        </div>
+                        <div class="form-group">
+                            <label>Especialidade / Categoria</label>
+                            <input id="fornecedorCategoria" placeholder="Ex: Cerimonialista, Buffet">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Telefone / WhatsApp</label>
+                            <input id="fornecedorTelefone" type="tel" placeholder="(00) 00000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail de Atendimento</label>
+                            <input id="fornecedorEmail" type="email" placeholder="contato@empresa.com">
+                        </div>
+                    </div>
+                    <button onclick="addFornecedor()">Cadastrar Contrato</button>
+                </div>
+
+                <div class="card">
+                    <h3>📞 Agenda Conectada</h3>
+                    <ul id="listaFornecedores"></ul>
+                </div>
+            </section>
+
+            <section>
+                <div class="card">
+                    <h3>🔔 Notificações & Pendências Operacionais</h3>
+                    <div id="listaLembretes" style="margin-top: 15px;"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // =============================
+        // STORAGE SEGURO
+        // =============================
+        function carregarStorage(chave, padrao = []) {
+            try {
+                const dados = localStorage.getItem(chave);
+                return dados ? JSON.parse(dados) : padrao;
+            } catch (erro) {
+                console.error("Erro ao carregar:", chave);
+                return padrao;
+            }
+        }
+
+        let casamento = carregarStorage("casamento", {});
+        let convidados = carregarStorage("convidados", []);
+        let orcamento = carregarStorage("orcamento", []);
+        let checklist = carregarStorage("checklist", []);
+        let fornecedores = carregarStorage("fornecedores", []);
+
+        // =============================
+        // NAVEGAÇÃO
+        // =============================
+        function trocarAba(indice) {
+            const secoes = document.querySelectorAll("section");
+            const botoes = document.querySelectorAll("nav button");
+
+            secoes.forEach((secao, i) => {
+                secao.classList.toggle("active", i === indice);
+            });
+            botoes.forEach((botao, i) => {
+                botao.classList.toggle("active", i === indice);
+            });
+        }
+
+        // =============================
+        // CASAMENTO & CONTADOR
+        // =============================
+        function salvarCasamento() {
+            casamento = {
+                data: document.getElementById("dataCasamento").value,
+                hora: document.getElementById("horaCasamento").value,
+                local: document.getElementById("localCasamento").value.trim()
+            };
+            localStorage.setItem("casamento", JSON.stringify(casamento));
+            atualizarContador();
+            atualizarDashboard();
+            renderLembretes();
+            alert("Informações do casamento gravadas com sucesso!");
+        }
+
+        function atualizarContador() {
+            const contador = document.getElementById("contador");
+            const dashDias = document.getElementById("dashDias");
+            
+            if (!casamento || !casamento.data) {
+                contador.innerHTML = "<p>Defina a data do casamento para iniciar</p>";
+                if (dashDias) dashDias.innerText = "0";
+                return;
+            }
+
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+
+            const partes = casamento.data.split("-");
+            const dataCasamento = new Date(partes[0], partes[1] - 1, partes[2]);
+            const diferenca = dataCasamento - hoje;
+            const dias = Math.ceil(diferenca / (1000 * 60 * 60 * 24));
+
+            if (dias < 0) {
+                contador.innerHTML = "<h1>💍</h1><p>O grande dia chegou!</p>";
+                if (dashDias) dashDias.innerText = "0";
+                return;
+            }
+
+            contador.innerHTML = `<h1>${dias}</h1><p>Dias Restantes</p>`;
+            if (dashDias) dashDias.innerText = dias;
+        }
+
+        // =============================
+        // DASHBOARD CONTROL
+        // =============================
+        function atualizarDashboard() {
+            document.getElementById("dashConvidados").innerText = convidados.length;
+            
+            const confirmados = convidados.filter(c => c.status === "confirmado").length;
+            document.getElementById("dashConfirmados").innerText = confirmados;
+
+            const totalGastos = orcamento.reduce((soma, item) => soma + Number(item.valor || 0), 0);
+            document.getElementById("dashGastos").innerText = totalGastos.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+            const concluidas = checklist.filter(t => t.concluido).length;
+            const percentual = checklist.length > 0 ? Math.round((concluidas / checklist.length) * 100) : 0;
+            document.getElementById("dashChecklist").innerText = percentual + "%";
+            document.getElementById("dashFornecedores").innerText = fornecedores.length;
+        }
+
+        // =============================
+        // GESTÃO DE CONVIDADOS
+        // =============================
+        function addConvidado() {
+            const nomeInput = document.getElementById("nomeConvidado");
+            const statusInput = document.getElementById("statusConvidado");
+            const nome = nomeInput.value.trim();
+            const status = statusInput.value;
+
+            if (!nome) { alert("Informe o nome do convidado."); return; }
+            if (convidados.some(c => c.nome.toLowerCase() === nome.toLowerCase())) { alert("Convidado já inserido na lista."); return; }
+
+            convidados.push({ nome, status });
+            localStorage.setItem("convidados", JSON.stringify(convidados));
+            nomeInput.value = "";
+            
+            renderConvidados();
+            atualizarDashboard();
+            renderLembretes();
+        }
+
+        function removerConvidado(index) {
+            if (!confirm("Deseja realmente remover este convidado de forma permanente?")) return;
+            convidados.splice(index, 1);
+            localStorage.setItem("convidados", JSON.stringify(convidados));
+            renderConvidados();
+            atualizarDashboard();
+            renderLembretes();
+        }
+
+        function alterarStatus(index) {
+            const novoStatus = prompt("Digite o novo status (confirmado, pendente, recusado):");
+            if (!novoStatus) return;
+            const status = novoStatus.toLowerCase().trim();
+
+            if (!["confirmado", "pendente", "recusado"].includes(status)) {
+                alert("Status inválido digitado.");
+                return;
+            }
+
+            convidados[index].status = status;
+            localStorage.setItem("convidados", JSON.stringify(convidados));
+            renderConvidados();
+            atualizarDashboard();
+            renderLembretes();
+        }
+
+        function renderConvidados() {
+            const lista = document.getElementById("listaConvidados");
+            const filtro = document.getElementById("pesquisaConvidado").value.toLowerCase();
+            lista.innerHTML = "";
+
+            convidados.forEach((c, index) => {
+                if (filtro && !c.nome.toLowerCase().includes(filtro)) return;
+
+                lista.innerHTML += `
+                <li>
+                    <div>
+                        <strong>${c.nome}</strong><br>
+                        <span class="badge ${c.status}">${c.status}</span>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-outline" onclick="alterarStatus(${index})">Alterar</button>
+                        <button class="btn-danger-light" onclick="removerConvidado(${index})">Remover</button>
+                    </div>
+                </li>`;
+            });
+
+            document.getElementById("totalConvidados").innerText = convidados.length;
+            document.getElementById("totalConfirmados").innerText = convidados.filter(c => c.status === "confirmado").length;
+            document.getElementById("totalPendentes").innerText = convidados.filter(c => c.status === "pendente").length;
+            document.getElementById("totalRecusados").innerText = convidados.filter(c => c.status === "recusado").length;
+        }
+
+        // =============================
+        // GESTÃO DE ORÇAMENTO
+        // =============================
+        // =============================
+// GESTÃO DE ORÇAMENTO (CORRIGIDO)
+// =============================
+function addItem() {
+    const categoria = document.getElementById("categoria").value;
+    const descricao = document.getElementById("descricao").value.trim();
+
+    // Aceita tanto ponto quanto vírgula digitados pelo usuário
+    const valor = parseFloat(
+        document.getElementById("valor").value.replace(",", ".")
+    );
+
+    const valorPago = parseFloat(
+        document.getElementById("valorPago").value.replace(",", ".") || 0
+    );
+
+    const vencimento = document.getElementById("vencimento").value;
+
+    if (!descricao) {
+        alert("Digite uma descrição.");
+        return;
+    }
+
+    if (isNaN(valor) || valor <= 0) {
+        alert("Informe um valor válido.");
+        return;
+    }
+
+    if (!isNaN(valorPago) && valorPago > valor) {
+        alert("Valor pago não pode ser maior que o valor total.");
+        return;
+    }
+
+    // Alimenta a array global do caixa
+    orcamento.push({
+        categoria,
+        descricao,
+        valor,
+        valorPago: isNaN(valorPago) ? 0 : valorPago,
+        vencimento
+    });
+
+    localStorage.setItem("orcamento", JSON.stringify(orcamento));
+
+    // Limpa os campos do formulário
+    document.getElementById("descricao").value = "";
+    document.getElementById("valor").value = "";
+    document.getElementById("valorPago").value = "";
+    document.getElementById("vencimento").value = "";
+
+    // Atualiza as interfaces e o painel financeiro
+    renderOrcamento();
+    atualizarDashboard();
+    renderLembretes();
+
+    alert("Despesa cadastrada com sucesso!");
+}   
+        function removerItem(index) {
+            if (!confirm("Remover esta despesa do balanço financeiro?")) return;
+            orcamento.splice(index, 1);
+            localStorage.setItem("orcamento", JSON.stringify(orcamento));
+            renderOrcamento();
+            atualizarDashboard();
+            renderLembretes();
+        }
+
+    function renderOrcamento() {
+    const lista = document.getElementById("listaOrcamento");
+    if (!lista) return;
+
+    lista.innerHTML = "";
+    let total = 0, pago = 0;
+
+    orcamento.forEach((item, index) => {
+        const itemValor = Number(item.valor || 0);
+        const itemValorPago = Number(item.valorPago || 0); // <-- CORRIGIDO: Declarado corretamente aqui
+
+        total += itemValor;
+        pago += itemValorPago;
+
+        const status = itemValorPago >= itemValor ? "pago" : (itemValorPago > 0 ? "parcial" : "pendente");
+
+        lista.innerHTML += `
+        <div class="card" style="margin-bottom: 0;">
+            <span class="badge ${status}">${status}</span>
+            <h4 style="margin-top:14px; color: var(--primary-dark); font-weight:600;">${item.categoria}</h4>
+            <p style="font-size:0.9rem; margin: 4px 0 12px 0; color: var(--text-main);">${item.descricao}</p>
+            <div style="font-size: 0.9rem; background:rgba(0,0,0,0.03); padding: 12px; border-radius:10px; margin-bottom:12px;">
+                <div style="margin-bottom:4px;">Total: <strong>R$ ${itemValor.toFixed(2).replace('.', ',')}</strong></div>
+                <div>Pago: <strong style="color:var(--success)">R$ ${itemValorPago.toFixed(2).replace('.', ',')}</strong></div>
+            </div>
+            <button class="btn-danger-light" style="width:100%; padding:10px;" onclick="removerItem(${index})">Excluir Registro</button>
+        </div>`;
+    });
+
+    const pendente = total - pago;
+    document.getElementById("totalInvestido").innerText = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    document.getElementById("totalPago").innerText = pago.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    document.getElementById("totalPendente").innerText = pendente.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+    const barraPago = document.getElementById("barraPago");
+    const barraPendente = document.getElementById("barraPendente");
+
+    if (total > 0) {
+        if (barraPago) barraPago.style.width = ((pago / total) * 100) + "%";
+        if (barraPendente) barraPendente.style.width = ((pendente / total) * 100) + "%";
+    } else {
+        if (barraPago) barraPago.style.width = "0%";
+        if (barraPendente) barraPendente.style.width = "0%";
+    }
+}
+        // =============================
+        // GERENCIADOR DE CHECKLIST
+        // =============================
+        function addChecklist() {
+            const input = document.getElementById("novaTarefa");
+            const tarefa = input.value.trim();
+
+            if (!tarefa) return;
+            if (checklist.some(t => t.tarefa.toLowerCase() === tarefa.toLowerCase())) { alert("Esta meta já foi criada."); return; }
+
+            checklist.push({ tarefa, concluido: false });
+            localStorage.setItem("checklist", JSON.stringify(checklist));
+            input.value = "";
+            renderChecklist();
+        }
+
+        function alternarChecklist(index) {
+            checklist[index].concluido = !checklist[index].concluido;
+            localStorage.setItem("checklist", JSON.stringify(checklist));
+            renderChecklist();
+        }
+
+        function removerChecklist(index) {
+            checklist.splice(index, 1);
+            localStorage.setItem("checklist", JSON.stringify(checklist));
+            renderChecklist();
+        }
+
+        function renderChecklist() {
+            const lista = document.getElementById("listaChecklist");
+            lista.innerHTML = "";
+            let concluidas = 0;
+
+            checklist.forEach((item, index) => {
+                if (item.concluido) concluidas++;
+                lista.innerHTML += `
+                <li>
+                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.95rem;">
+                        <input type="checkbox" ${item.concluido ? "checked" : ""} onchange="alternarChecklist(${index})" style="width:auto; margin-top:0;">
+                        <span style="${item.concluido ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${item.tarefa}</span>
+                    </label>
+                    <button class="btn-danger-light" onclick="removerChecklist(${index})">Remover</button>
+                </li>`;
+            });
+
+            const percentual = checklist.length ? Math.round((concluidas / checklist.length) * 100) : 0;
+            document.getElementById("barraChecklist").style.width = percentual + "%";
+            document.getElementById("textoProgresso").innerText = percentual + "% concluído";
+            atualizarDashboard();
+        }
+
+        // =============================
+        // MÓDULO FORNECEDORES
+        // =============================
+        function addFornecedor() {
+            const nome = document.getElementById("fornecedorNome").value.trim();
+            const categoryInput = document.getElementById("fornecedorCategoria");
+            const telInput = document.getElementById("fornecedorTelefone");
+            const emailInput = document.getElementById("fornecedorEmail");
+
+            const categoria = categoryInput.value.trim();
+            const telefone = telInput.value.trim();
+            const email = emailInput.value.trim();
+
+            if (!nome) { alert("É obrigatório preencher o nome da empresa."); return; }
+
+            fornecedores.push({ nome, categoria, telefone, email });
+            localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
+
+            document.getElementById("fornecedorNome").value = "";
+            categoryInput.value = "";
+            telInput.value = "";
+            emailInput.value = "";
+
+            renderFornecedores();
+        }
+
+        // Renomeado para evitar conflitos globais de escopo
+        function removerFornecedor(index) {
+            if(!confirm("Remover este fornecedor da lista de contatos?")) return;
+            fornecedores.splice(index, 1);
+            localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
+            renderFornecedores();
+        }
+
+        function renderFornecedores() {
+            const lista = document.getElementById("listaFornecedores");
+            lista.innerHTML = "";
+
+            fornecedores.forEach((f, index) => {
+                lista.innerHTML += `
+                <li>
+                    <div style="font-size:0.95rem; line-height: 1.5;">
+                        <strong style="color:var(--primary-dark); font-size:1.1rem;">${f.nome}</strong><br>
+                        💼 Categoria: ${f.categoria || 'Não informada'}<br>
+                        📞 Tel: ${f.telefone || 'Não informado'} | ✉️ E-mail: ${f.email || 'Não informado'}
+                    </div>
+                    <button class="btn-danger-light" onclick="removerFornecedor(${index})">Remover</button>
+                </li>`;
+            });
+            atualizarDashboard();
+        }
+
+        // =============================
+        // BACKUP COMPACTO
+        // =============================
+        function exportarBackup() {
+            const dados = { casamento, convidados, orcamento, checklist, fornecedores };
+            const blob = new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `casamento-backup-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+        }
+
+        function importarBackup(event) {
+            const arquivo = event.target.files[0];
+            if (!arquivo) return;
+
+            const leitor = new FileReader();
+            leitor.onload = function(e) {
+                try {
+                    const dados = JSON.parse(e.target.result);
+                    
+                    casamento = dados.casamento || {};
+                    convidados = dados.convidados || [];
+                    orcamento = dados.orcamento || [];
+                    checklist = dados.checklist || [];
+                    fornecedores = dados.fornecedores || [];
+
+                    localStorage.setItem("casamento", JSON.stringify(casamento));
+                    localStorage.setItem("convidados", JSON.stringify(convidados));
+                    localStorage.setItem("orcamento", JSON.stringify(orcamento));
+                    localStorage.setItem("checklist", JSON.stringify(checklist));
+                    localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
+
+                    carregarDados();
+                    alert("Base de dados restaurada com sucesso!");
+                } catch {
+                    alert("O arquivo selecionado não contém uma estrutura de backup válida.");
+                }
+            };
+            leitor.readAsText(arquivo);
+        }
+
+        // =============================
+        // SISTEMA DE LEMBRETES INTELIGENTES
+        // =============================
+        function renderLembretes() {
+            const div = document.getElementById("listaLembretes");
+            if (!div) return;
+            div.innerHTML = "";
+
+            const pendentes = convidados.filter(c => c.status === "pendente").length;
+            if (pendentes > 0) {
+                div.innerHTML += `<div class="alerta">⚠️ Há <strong>${pendentes} convidados</strong> aguardando confirmação de presença (RSVP).</div>`;
+            }
+
+            orcamento.forEach(item => {
+                if (Number(item.valorPago || 0) < Number(item.valor || 0)) {
+                    div.innerHTML += `<div class="alerta">💰 Há parcelas em aberto para o item: <strong>${item.descricao}</strong> (${item.categoria}).</div>`;
+                }
+            });
+
+            if (div.innerHTML === "") {
+                div.innerHTML = `<div class="alerta" style="border-left-color: var(--success)">🎉 Tudo certo! Sem nenhuma pendência crítica ativa no momento.</div>`;
+            }
+        }
+
+        // =============================
+        // INICIALIZADOR GLOBAL
+        // =============================
+        function carregarDados() {
+            if (casamento && casamento.data) {
+                document.getElementById("dataCasamento").value = casamento.data || "";
+                document.getElementById("horaCasamento").value = casamento.hora || "";
+                document.getElementById("localCasamento").value = casamento.local || "";
+            }
+            atualizarContador();
+            renderConvidados();
+            renderOrcamento();
+            renderChecklist();
+            renderFornecedores();
+            renderLembretes();
+            atualizarDashboard();
+        }
+
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("sw.js").catch(() => {});
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", carregarDados);
+    </script>
+</body>
+</html>
