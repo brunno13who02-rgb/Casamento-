@@ -338,7 +338,7 @@
         /* Contador Elegant */
         #contador {
             text-align: center;
-            padding: 20px 0;
+            padding: 10px 0;
         }
 
         #contador h1 {
@@ -354,6 +354,78 @@
             letter-spacing: 3px;
             font-size: 0.9rem;
             margin-top: 10px;
+        }
+
+        /* ESTILOS DO CONVITE PREMIUM */
+        .premium-invitation {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            text-align: left;
+            margin-top: 30px;
+            padding: 10px 5px;
+        }
+
+        .invitation-row {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .invitation-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .invitation-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-dark);
+            width: 40px;
+            height: 40px;
+        }
+
+        .invitation-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .invitation-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .invitation-value {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+        }
+
+        .invitation-divider {
+            height: 1px;
+            background: var(--primary);
+            opacity: 0.4;
+            margin-top: 16px;
+            position: relative;
+            width: 100%;
+        }
+
+        .invitation-divider::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -3px;
+            width: 7px;
+            height: 7px;
+            background: var(--primary);
+            border-radius: 50%;
         }
 
         /* Listas Modernas */
@@ -468,8 +540,8 @@
             .stat { padding: 16px; }
             .stat h2 { font-size: 1.5rem; }
             li { flex-direction: column; align-items: flex-start; gap: 12px; }
-            li div:last-child { width: 100%; display: flex; gap: 8px; }
-            li button { flex: 1; text-align: center; justify-content: center; }
+            li div:last-child { width: 100%; display: flex; gap: 8px; flex-wrap: wrap; }
+            li button { flex: 1; min-width: 100px; text-align: center; justify-content: center; }
         }
     </style>
 </head>
@@ -485,36 +557,16 @@
             <button onclick="trocarAba(1)">👥 Convidados</button>
             <button onclick="trocarAba(2)">💰 Orçamento</button>
             <button onclick="trocarAba(3)">📋 Checklist</button>
-            <button onclick="trocarAba(4)">🏢 Fornecedores</button>
-            <button onclick="trocarAba(5)">🔔 Lembretes</button>
+            <button onclick="trocarAba(4)">🔔 Lembretes</button>
+            <button onclick="trocarAba(5)">⚙️ Configurações & Backup</button>
         </nav>
 
         <main>
+            <!-- 0. GERAL -->
             <section class="active">
-                <div class="grid-half">
-                    <div class="card">
-                        <h3>📅 Informações Básicas</h3>
-                        <div class="form-group">
-                            <label>Data do Evento</label>
-                            <input type="date" id="dataCasamento">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Horário</label>
-                                <input type="time" id="horaCasamento">
-                            </div>
-                            <div class="form-group">
-                                <label>Local</label>
-                                <input id="localCasamento" placeholder="Ex: Capela Real ou Salão Nobre">
-                            </div>
-                        </div>
-                        <button onclick="salvarCasamento()" class="btn-secondary">Salvar Configurações</button>
-                    </div>
-
-                    <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
-                        <h3>⏳ Contagem Regressiva</h3>
-                        <div id="contador"></div>
-                    </div>
+                <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
+                    <h3>⏳ Contagem Regressiva</h3>
+                    <div id="contador"></div>
                 </div>
 
                 <div class="card">
@@ -525,25 +577,11 @@
                         <div class="stat"><h2 id="dashConfirmados">0</h2><p>Confirmados (RSVP)</p></div>
                         <div class="stat"><h2 id="dashGastos">R$ 0,00</h2><p>Orçamento Contratado</p></div>
                         <div class="stat"><h2 id="dashChecklist">0%</h2><p>Tarefas Concluídas</p></div>
-                        <div class="stat"><h2 id="dashFornecedores">0</h2><p>Fornecedores Ativos</p></div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>💾 Segurança da Informação</h3>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">
-                        Exporte seus dados locais para backup ou transfira para outro dispositivo de forma simples.
-                    </p>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                        <button onclick="exportarBackup()">Exportar Dados (.JSON)</button>
-                        <div style="position: relative;">
-                            <input type="file" id="arquivoBackup" accept=".json" onchange="importarBackup(event)" style="margin-top: 0; display: none;">
-                            <button onclick="document.getElementById('arquivoBackup').click()" class="btn-secondary">Importar Backup</button>
-                        </div>
                     </div>
                 </div>
             </section>
 
+            <!-- 1. CONVIDADOS -->
             <section>
                 <div class="grid-half">
                     <div class="card">
@@ -581,6 +619,7 @@
                 </div>
             </section>
 
+            <!-- 2. ORÇAMENTO -->
             <section>
                 <div class="grid-half">
                     <div class="card">
@@ -646,16 +685,31 @@
                 <div id="listaOrcamento" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 5px; width: 100%;"></div>
             </section>
 
+            <!-- 3. CHECKLIST -->
             <section>
                 <div class="card">
                     <h3>📋 Planejamento de Metas (Checklist)</h3>
-                    <div style="display: flex; gap: 12px; align-items: flex-end;">
-                        <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                            <label>Descrição do Objetivo</label>
-                            <input id="novaTarefa" placeholder="Ex: Degustação do bolo de casamento">
-                        </div>
-                        <button onclick="addChecklist()" style="width: auto; height: 50px; margin-top: 0;">Adicionar</button>
+                    <div class="form-group">
+                        <label>Descrição do Objetivo</label>
+                        <input id="novaTarefa" placeholder="Ex: Degustação do bolo de casamento">
                     </div>
+                    
+                    <div class="form-row" style="margin-top: 8px;">
+                        <div class="form-group">
+                            <label>Data</label>
+                            <input type="date" id="dataTarefa">
+                        </div>
+                        <div class="form-group">
+                            <label>Horário</label>
+                            <input type="time" id="horaTarefa">
+                        </div>
+                        <div class="form-group">
+                            <label>Local</label>
+                            <input id="localTarefa" placeholder="Ex: Ateliê da Estilista">
+                        </div>
+                    </div>
+                    
+                    <button onclick="addChecklist()" style="margin-top: 8px;">Adicionar à Agenda</button>
                     
                     <div class="progress">
                         <div class="progress-bar" id="barraChecklist"></div>
@@ -664,47 +718,56 @@
                 </div>
 
                 <div class="card">
-                    <h3>Tarefas Registradas</h3>
+                    <h3>Compromissos & Tarefas Registradas</h3>
                     <ul id="listaChecklist"></ul>
                 </div>
             </section>
 
-            <section>
-                <div class="card">
-                    <h3>🏢 Homologação de Fornecedores</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Razão Social / Nome Fantasia</label>
-                            <input id="fornecedorNome" placeholder="Nome da empresa">
-                        </div>
-                        <div class="form-group">
-                            <label>Especialidade / Categoria</label>
-                            <input id="fornecedorCategoria" placeholder="Ex: Cerimonialista, Buffet">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Telefone / WhatsApp</label>
-                            <input id="fornecedorTelefone" type="tel" placeholder="(00) 00000-0000">
-                        </div>
-                        <div class="form-group">
-                            <label>E-mail de Atendimento</label>
-                            <input id="fornecedorEmail" type="email" placeholder="contato@empresa.com">
-                        </div>
-                    </div>
-                    <button onclick="addFornecedor()">Cadastrar Contrato</button>
-                </div>
-
-                <div class="card">
-                    <h3>📞 Agenda Conectada</h3>
-                    <ul id="listaFornecedores"></ul>
-                </div>
-            </section>
-
+            <!-- 4. LEMBRETES -->
             <section>
                 <div class="card">
                     <h3>🔔 Notificações & Pendências Operacionais</h3>
                     <div id="listaLembretes" style="margin-top: 15px;"></div>
+                </div>
+            </section>
+
+            <!-- 5. CONFIGURAÇÕES & BACKUP -->
+            <section>
+                <div class="grid-half">
+                    <div class="card">
+                        <h3>📅 Informações Básicas</h3>
+                        <div class="form-group">
+                            <label>Data do Evento</label>
+                            <input type="date" id="dataCasamento">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Horário</label>
+                                <input type="time" id="horaCasamento">
+                            </div>
+                            <div class="form-group">
+                                <label>Local</label>
+                                <input id="localCasamento" placeholder="Ex: Capela Real ou Salão Nobre">
+                            </div>
+                        </div>
+                        <button onclick="salvarCasamento()" class="btn-secondary">Salvar Configurações</button>
+                    </div>
+
+                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <h3>💾 Segurança da Informação & Backup</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5;">
+                                Exporte seus dados locais em formato JSON ou restaure backups salvos anteriormente.
+                            </p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <button onclick="exportarBackup()">📥 Exportar Dados (.JSON)</button>
+                            <div style="position: relative;">
+                                <input type="file" id="arquivoBackup" accept=".json" onchange="importarBackup(event)" style="margin-top: 0; display: none;">
+                                <button onclick="document.getElementById('arquivoBackup').click()" class="btn-secondary">📤 Importar Backup</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
@@ -728,7 +791,6 @@
         let convidados = carregarStorage("convidados", []);
         let orcamento = carregarStorage("orcamento", []);
         let checklist = carregarStorage("checklist", []);
-        let fornecedores = carregarStorage("fornecedores", []);
 
         // =============================
         // NAVEGAÇÃO
@@ -746,7 +808,7 @@
         }
 
         // =============================
-        // CASAMENTO & CONTADOR
+        // CASAMENTO & CONTADOR PREMIUM
         // =============================
         function salvarCasamento() {
             casamento = {
@@ -778,6 +840,12 @@
             const dataCasamento = new Date(partes[0], partes[1] - 1, partes[2]);
             const diferenca = dataCasamento - hoje;
             const dias = Math.ceil(diferenca / (1000 * 60 * 60 * 24));
+            
+            const meses = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
+            const diaPorExtenso = parseInt(partes[2], 10);
+            const mesPorExtenso = meses[parseInt(partes[1], 10) - 1];
+            const anoPorExtenso = partes[0];
+            const dataFinalTexto = `${diaPorExtenso} DE ${mesPorExtenso} DE ${anoPorExtenso}`;
 
             if (dias < 0) {
                 contador.innerHTML = "<h1>💍</h1><p>O grande dia chegou!</p>";
@@ -785,8 +853,56 @@
                 return;
             }
 
-            contador.innerHTML = `<h1>${dias}</h1><p>Dias Restantes</p>`;
             if (dashDias) dashDias.innerText = dias;
+
+            contador.innerHTML = `
+                <h1>${dias}</h1>
+                <p>Dias Restantes</p>
+                
+                <div class="premium-invitation">
+                    <!-- DATA -->
+                    <div class="invitation-row">
+                        <div class="invitation-meta">
+                            <div class="invitation-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            </div>
+                            <div class="invitation-text">
+                                <span class="invitation-label">DATA</span>
+                                <span class="invitation-value">${dataFinalTexto}</span>
+                            </div>
+                        </div>
+                        <div class="invitation-divider"></div>
+                    </div>
+
+                    <!-- HORÁRIO -->
+                    <div class="invitation-row">
+                        <div class="invitation-meta">
+                            <div class="invitation-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            </div>
+                            <div class="invitation-text">
+                                <span class="invitation-label">HORÁRIO</span>
+                                <span class="invitation-value">${casamento.hora ? casamento.hora.replace(':', 'h') : 'NÃO DEFINIDO'}</span>
+                            </div>
+                        </div>
+                        <div class="invitation-divider"></div>
+                    </div>
+
+                    <!-- LOCAL -->
+                    <div class="invitation-row">
+                        <div class="invitation-meta">
+                            <div class="invitation-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            </div>
+                            <div class="invitation-text">
+                                <span class="invitation-label">LOCAL</span>
+                                <span class="invitation-value">${casamento.local ? casamento.local.toUpperCase() : 'NÃO DEFINIDO'}</span>
+                            </div>
+                        </div>
+                        <div class="invitation-divider"></div>
+                    </div>
+                </div>
+            `;
         }
 
         // =============================
@@ -804,7 +920,6 @@
             const concluidas = checklist.filter(t => t.concluido).length;
             const percentual = checklist.length > 0 ? Math.round((concluidas / checklist.length) * 100) : 0;
             document.getElementById("dashChecklist").innerText = percentual + "%";
-            document.getElementById("dashFornecedores").innerText = fornecedores.length;
         }
 
         // =============================
@@ -837,17 +952,8 @@
             renderLembretes();
         }
 
-        function alterarStatus(index) {
-            const novoStatus = prompt("Digite o novo status (confirmado, pendente, recusado):");
-            if (!novoStatus) return;
-            const status = novoStatus.toLowerCase().trim();
-
-            if (!["confirmado", "pendente", "recusado"].includes(status)) {
-                alert("Status inválido digitado.");
-                return;
-            }
-
-            convidados[index].status = status;
+        function mudarStatus(index, novoStatus) {
+            convidados[index].status = novoStatus;
             localStorage.setItem("convidados", JSON.stringify(convidados));
             renderConvidados();
             atualizarDashboard();
@@ -865,12 +971,14 @@
                 lista.innerHTML += `
                 <li>
                     <div>
-                        <strong>${c.nome}</strong><br>
-                        <span class="badge ${c.status}">${c.status}</span>
+                        <strong style="font-size: 1.05rem;">${c.nome}</strong><br>
+                        <span class="badge ${c.status}">${c.status === 'pendente' ? '⏳ Pendente' : c.status === 'confirmado' ? '✅ Confirmado' : '❌ Recusado'}</span>
                     </div>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn-outline" onclick="alterarStatus(${index})">Alterar</button>
-                        <button class="btn-danger-light" onclick="removerConvidado(${index})">Remover</button>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <button class="btn-outline" style="padding:6px 12px; font-size:0.8rem; border-color:${c.status === 'confirmado' ? 'var(--success)' : ''}" onclick="mudarStatus(${index}, 'confirmado')">✅ Confirmado</button>
+                        <button class="btn-outline" style="padding:6px 12px; font-size:0.8rem; border-color:${c.status === 'pendente' ? 'var(--warning)' : ''}" onclick="mudarStatus(${index}, 'pendente')">⏳ Pendente</button>
+                        <button class="btn-outline" style="padding:6px 12px; font-size:0.8rem; border-color:${c.status === 'recusado' ? 'var(--danger)' : ''}" onclick="mudarStatus(${index}, 'recusado')">❌ Recusado</button>
+                        <button class="btn-danger-light" style="padding:6px 12px; font-size:0.8rem;" onclick="removerConvidado(${index})">🗑️ Remover</button>
                     </div>
                 </li>`;
             });
@@ -884,63 +992,46 @@
         // =============================
         // GESTÃO DE ORÇAMENTO
         // =============================
-        // =============================
-// GESTÃO DE ORÇAMENTO (CORRIGIDO)
-// =============================
-function addItem() {
-    const categoria = document.getElementById("categoria").value;
-    const descricao = document.getElementById("descricao").value.trim();
+        function addItem() {
+            const categoria = document.getElementById("categoria").value;
+            const descricao = document.getElementById("descricao").value.trim();
 
-    // Aceita tanto ponto quanto vírgula digitados pelo usuário
-    const valor = parseFloat(
-        document.getElementById("valor").value.replace(",", ".")
-    );
+            const valor = parseFloat(
+                document.getElementById("valor").value.replace(",", ".")
+            );
 
-    const valorPago = parseFloat(
-        document.getElementById("valorPago").value.replace(",", ".") || 0
-    );
+            const valorPago = parseFloat(
+                document.getElementById("valorPago").value.replace(",", ".") || 0
+            );
 
-    const vencimento = document.getElementById("vencimento").value;
+            const vencimento = document.getElementById("vencimento").value;
 
-    if (!descricao) {
-        alert("Digite uma descrição.");
-        return;
-    }
+            if (!descricao) { alert("Digite uma descrição."); return; }
+            if (isNaN(valor) || valor <= 0) { alert("Informe um valor válido."); return; }
+            if (!isNaN(valorPago) && valorPago > valor) { alert("Valor pago não pode ser maior que o valor total."); return; }
 
-    if (isNaN(valor) || valor <= 0) {
-        alert("Informe um valor válido.");
-        return;
-    }
+            orcamento.push({
+                categoria,
+                descricao,
+                valor,
+                valorPago: isNaN(valorPago) ? 0 : valorPago,
+                vencimento
+            });
 
-    if (!isNaN(valorPago) && valorPago > valor) {
-        alert("Valor pago não pode ser maior que o valor total.");
-        return;
-    }
+            localStorage.setItem("orcamento", JSON.stringify(orcamento));
 
-    // Alimenta a array global do caixa
-    orcamento.push({
-        categoria,
-        descricao,
-        valor,
-        valorPago: isNaN(valorPago) ? 0 : valorPago,
-        vencimento
-    });
+            document.getElementById("descricao").value = "";
+            document.getElementById("valor").value = "";
+            document.getElementById("valorPago").value = "";
+            document.getElementById("vencimento").value = "";
 
-    localStorage.setItem("orcamento", JSON.stringify(orcamento));
+            renderOrcamento();
+            atualizarDashboard();
+            renderLembretes();
 
-    // Limpa os campos do formulário
-    document.getElementById("descricao").value = "";
-    document.getElementById("valor").value = "";
-    document.getElementById("valorPago").value = "";
-    document.getElementById("vencimento").value = "";
+            alert("Despesa cadastrada com sucesso!");
+        }   
 
-    // Atualiza as interfaces e o painel financeiro
-    renderOrcamento();
-    atualizarDashboard();
-    renderLembretes();
-
-    alert("Despesa cadastrada com sucesso!");
-}   
         function removerItem(index) {
             if (!confirm("Remover esta despesa do balanço financeiro?")) return;
             orcamento.splice(index, 1);
@@ -950,64 +1041,136 @@ function addItem() {
             renderLembretes();
         }
 
-    function renderOrcamento() {
-    const lista = document.getElementById("listaOrcamento");
-    if (!lista) return;
+        function renderOrcamento() {
+            const lista = document.getElementById("listaOrcamento");
+            if (!lista) return;
 
-    lista.innerHTML = "";
-    let total = 0, pago = 0;
+            lista.innerHTML = "";
+            let total = 0, pago = 0;
 
-    orcamento.forEach((item, index) => {
-        const itemValor = Number(item.valor || 0);
-        const itemValorPago = Number(item.valorPago || 0); // <-- CORRIGIDO: Declarado corretamente aqui
+            orcamento.forEach((item, index) => {
+                const itemValor = Number(item.valor || 0);
+                const itemValorPago = Number(item.valorPago || 0);
+                const restante = itemValor - itemValorPago;
 
-        total += itemValor;
-        pago += itemValorPago;
+                total += itemValor;
+                pago += itemValorPago;
 
-        const status = itemValorPago >= itemValor ? "pago" : (itemValorPago > 0 ? "parcial" : "pendente");
+                const status = itemValorPago >= itemValor ? "pago" : (itemValorPago > 0 ? "parcial" : "pendente");
 
-        lista.innerHTML += `
-        <div class="card" style="margin-bottom: 0;">
-            <span class="badge ${status}">${status}</span>
-            <h4 style="margin-top:14px; color: var(--primary-dark); font-weight:600;">${item.categoria}</h4>
-            <p style="font-size:0.9rem; margin: 4px 0 12px 0; color: var(--text-main);">${item.descricao}</p>
-            <div style="font-size: 0.9rem; background:rgba(0,0,0,0.03); padding: 12px; border-radius:10px; margin-bottom:12px;">
-                <div style="margin-bottom:4px;">Total: <strong>R$ ${itemValor.toFixed(2).replace('.', ',')}</strong></div>
-                <div>Pago: <strong style="color:var(--success)">R$ ${itemValorPago.toFixed(2).replace('.', ',')}</strong></div>
-            </div>
-            <button class="btn-danger-light" style="width:100%; padding:10px;" onclick="removerItem(${index})">Excluir Registro</button>
-        </div>`;
-    });
+                const campoPagamentoInline = restante > 0 ? `
+                    <div style="margin-top: 15px; border-top: 1px dashed rgba(197, 168, 128, 0.2); padding-top: 12px;">
+                        <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Registrar Nova Parcela</label>
+                        <div style="display: flex; gap: 8px; margin-top: 4px;">
+                            <input type="number" id="inputPgto-${index}" step="0.01" placeholder="R$ 0,00" 
+                                   style="margin-top: 0; padding: 10px 14px; font-size: 0.9rem; flex: 1; height: 42px;">
+                            <button onclick="adicionarParcela(${index})" class="btn-secondary" 
+                                    style="width: auto; padding: 0 16px; font-size: 0.85rem; height: 42px; white-space: nowrap;">
+                                Pagar
+                            </button>
+                        </div>
+                    </div>
+                ` : `
+                    <div style="margin-top: 15px; text-align: center; color: var(--success); font-size: 0.85rem; font-weight: 600; padding: 8px; background: rgba(46, 125, 50, 0.05); border-radius: 8px;">
+                        🎉 Item Totalmente Quitado!
+                    </div>
+                `;
 
-    const pendente = total - pago;
-    document.getElementById("totalInvestido").innerText = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    document.getElementById("totalPago").innerText = pago.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-    document.getElementById("totalPendente").innerText = pendente.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+                lista.innerHTML += `
+                <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <span class="badge ${status}">${status}</span>
+                        <h4 style="margin-top:14px; color: var(--primary-dark); font-weight:600;">${item.categoria}</h4>
+                        <p style="font-size:0.9rem; margin: 4px 0 12px 0; color: var(--text-main);">${item.descricao}</p>
+                        
+                        <div style="font-size: 0.9rem; background:rgba(0,0,0,0.03); padding: 12px; border-radius:10px;">
+                            <div style="margin-bottom:6px;">Total: <strong>R$ ${itemValor.toFixed(2).replace('.', ',')}</strong></div>
+                            <div style="margin-bottom:6px;">Pago: <strong style="color:var(--success)">R$ ${itemValorPago.toFixed(2).replace('.', ',')}</strong></div>
+                            <div>Restante: <strong style="color:${restante > 0 ? 'var(--warning)' : 'var(--text-muted)'}">R$ ${restante.toFixed(2).replace('.', ',')}</strong></div>
+                        </div>
+                        
+                        ${campoPagamentoInline}
+                    </div>
+                    
+                    <button class="btn-danger-light" style="width:100%; padding:10px; margin-top: 15px;" onclick="removerItem(${index})">Excluir Registro</button>
+                </div>`;
+            });
 
-    const barraPago = document.getElementById("barraPago");
-    const barraPendente = document.getElementById("barraPendente");
+            const pendente = total - pago;
+            document.getElementById("totalInvestido").innerText = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+            document.getElementById("totalPago").innerText = pago.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+            document.getElementById("totalPendente").innerText = pendente.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-    if (total > 0) {
-        if (barraPago) barraPago.style.width = ((pago / total) * 100) + "%";
-        if (barraPendente) barraPendente.style.width = ((pendente / total) * 100) + "%";
-    } else {
-        if (barraPago) barraPago.style.width = "0%";
-        if (barraPendente) barraPendente.style.width = "0%";
-    }
-}
+            const barraPago = document.getElementById("barraPago");
+            const barraPendente = document.getElementById("barraPendente");
+
+            if (total > 0) {
+                if (barraPago) barraPago.style.width = ((pago / total) * 100) + "%";
+                if (barraPendente) barraPendente.style.width = ((pendente / total) * 100) + "%";
+            } else {
+                if (barraPago) barraPago.style.width = "0%";
+                if (barraPendente) barraPendente.style.width = "0%";
+            }
+        }
+
+        function adicionarParcela(index) {
+            const input = document.getElementById(`inputPgto-${index}`);
+            if (!input) return;
+
+            const valorNovaParcela = parseFloat(input.value.replace(",", "."));
+
+            if (isNaN(valorNovaParcela) || valorNovaParcela <= 0) {
+                alert("Por favor, informe um valor válido para a parcela.");
+                return;
+            }
+
+            const item = orcamento[index];
+            const restante = Number(item.valor || 0) - Number(item.valorPago || 0);
+
+            if (valorNovaParcela > restante) {
+                alert(`O valor digitado (R$ ${valorNovaParcela.toFixed(2).replace('.', ',')}) é maior do que o restante a pagar (R$ ${restante.toFixed(2).replace('.', ',')}).`);
+                return;
+            }
+
+            orcamento[index].valorPago = Number(orcamento[index].valorPago || 0) + valorNovaParcela;
+            localStorage.setItem("orcamento", JSON.stringify(orcamento));
+
+            renderOrcamento();
+            atualizarDashboard();
+            renderLembretes();
+        }
+
         // =============================
         // GERENCIADOR DE CHECKLIST
         // =============================
         function addChecklist() {
             const input = document.getElementById("novaTarefa");
+            const inputData = document.getElementById("dataTarefa");
+            const inputHora = document.getElementById("horaTarefa");
+            const inputLocal = document.getElementById("localTarefa");
+
             const tarefa = input.value.trim();
+            const data = inputData.value;
+            const hora = inputHora.value;
+            const local = inputLocal.value.trim();
 
-            if (!tarefa) return;
-            if (checklist.some(t => t.tarefa.toLowerCase() === tarefa.toLowerCase())) { alert("Esta meta já foi criada."); return; }
+            if (!tarefa) { alert("Informe a descrição do objetivo."); return; }
 
-            checklist.push({ tarefa, concluido: false });
+            checklist.push({ 
+                tarefa, 
+                concluido: false,
+                data,
+                hora,
+                local
+            });
+            
             localStorage.setItem("checklist", JSON.stringify(checklist));
+            
             input.value = "";
+            inputData.value = "";
+            inputHora.value = "";
+            inputLocal.value = "";
+            
             renderChecklist();
         }
 
@@ -1030,12 +1193,25 @@ function addItem() {
 
             checklist.forEach((item, index) => {
                 if (item.concluido) concluidas++;
+                
+                const temInfoAdicional = item.data || item.hora || item.local;
+                const infoHtml = temInfoAdicional ? `
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-left: 28px; margin-top: 4px; line-height: 1.4;">
+                        ${item.data ? `📅 ${item.data.split('-').reverse().join('/')}` : ''}
+                        ${item.hora ? ` 🕒 ${item.hora}` : ''}
+                        ${item.local ? ` 📍 ${item.local}` : ''}
+                    </div>
+                ` : '';
+
                 lista.innerHTML += `
                 <li>
-                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.95rem;">
-                        <input type="checkbox" ${item.concluido ? "checked" : ""} onchange="alternarChecklist(${index})" style="width:auto; margin-top:0;">
-                        <span style="${item.concluido ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${item.tarefa}</span>
-                    </label>
+                    <div style="flex: 1;">
+                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.95rem;">
+                            <input type="checkbox" ${item.concluido ? "checked" : ""} onchange="alternarChecklist(${index})" style="width:auto; margin-top:0;">
+                            <span style="${item.concluido ? 'text-decoration: line-through; color: var(--text-muted);' : ''}"><strong>${item.tarefa}</strong></span>
+                        </label>
+                        ${infoHtml}
+                    </div>
                     <button class="btn-danger-light" onclick="removerChecklist(${index})">Remover</button>
                 </li>`;
             });
@@ -1047,62 +1223,10 @@ function addItem() {
         }
 
         // =============================
-        // MÓDULO FORNECEDORES
-        // =============================
-        function addFornecedor() {
-            const nome = document.getElementById("fornecedorNome").value.trim();
-            const categoryInput = document.getElementById("fornecedorCategoria");
-            const telInput = document.getElementById("fornecedorTelefone");
-            const emailInput = document.getElementById("fornecedorEmail");
-
-            const categoria = categoryInput.value.trim();
-            const telefone = telInput.value.trim();
-            const email = emailInput.value.trim();
-
-            if (!nome) { alert("É obrigatório preencher o nome da empresa."); return; }
-
-            fornecedores.push({ nome, categoria, telefone, email });
-            localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
-
-            document.getElementById("fornecedorNome").value = "";
-            categoryInput.value = "";
-            telInput.value = "";
-            emailInput.value = "";
-
-            renderFornecedores();
-        }
-
-        // Renomeado para evitar conflitos globais de escopo
-        function removerFornecedor(index) {
-            if(!confirm("Remover este fornecedor da lista de contatos?")) return;
-            fornecedores.splice(index, 1);
-            localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
-            renderFornecedores();
-        }
-
-        function renderFornecedores() {
-            const lista = document.getElementById("listaFornecedores");
-            lista.innerHTML = "";
-
-            fornecedores.forEach((f, index) => {
-                lista.innerHTML += `
-                <li>
-                    <div style="font-size:0.95rem; line-height: 1.5;">
-                        <strong style="color:var(--primary-dark); font-size:1.1rem;">${f.nome}</strong><br>
-                        💼 Categoria: ${f.categoria || 'Não informada'}<br>
-                        📞 Tel: ${f.telefone || 'Não informado'} | ✉️ E-mail: ${f.email || 'Não informado'}
-                    </div>
-                    <button class="btn-danger-light" onclick="removerFornecedor(${index})">Remover</button>
-                </li>`;
-            });
-            atualizarDashboard();
-        }
-
-        // =============================
         // BACKUP COMPACTO
         // =============================
         function exportarBackup() {
-            const dados = { casamento, convidados, orcamento, checklist, fornecedores };
+            const dados = { casamento, convidados, orcamento, checklist };
             const blob = new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
@@ -1123,13 +1247,11 @@ function addItem() {
                     convidados = dados.convidados || [];
                     orcamento = dados.orcamento || [];
                     checklist = dados.checklist || [];
-                    fornecedores = dados.fornecedores || [];
 
                     localStorage.setItem("casamento", JSON.stringify(casamento));
                     localStorage.setItem("convidados", JSON.stringify(convidados));
                     localStorage.setItem("orcamento", JSON.stringify(orcamento));
                     localStorage.setItem("checklist", JSON.stringify(checklist));
-                    localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
 
                     carregarDados();
                     alert("Base de dados restaurada com sucesso!");
@@ -1177,7 +1299,6 @@ function addItem() {
             renderConvidados();
             renderOrcamento();
             renderChecklist();
-            renderFornecedores();
             renderLembretes();
             atualizarDashboard();
         }
