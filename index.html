@@ -466,29 +466,14 @@
             background: var(--primary-dark);
         }
 
-        li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            padding: 18px 8px;
-            border-bottom: 1px solid rgba(197, 168, 128, 0.12);
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .badge {
             display: inline-flex;
             align-items: center;
-            margin-top: 6px;
+            margin-top: 4px;
             margin-right: 4px;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 50px;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -500,28 +485,6 @@
 
         .tipo-cerimonia { background: rgba(197, 168, 128, 0.2); color: var(--primary-dark); }
         .tipo-festa { background: rgba(212, 175, 55, 0.2); color: #7a5e00; }
-
-        .guest-actions-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: flex-end;
-        }
-
-        .action-row {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .action-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
 
         .progress {
             height: 6px;
@@ -595,10 +558,6 @@
             .dashboard { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .stat { padding: 16px; }
             .stat h2 { font-size: 1.5rem; }
-            li { flex-direction: column; align-items: flex-start; gap: 12px; }
-            .guest-actions-group { width: 100%; align-items: flex-start; }
-            .action-row { width: 100%; justify-content: flex-start; }
-            li button { flex: 1; min-width: 90px; text-align: center; justify-content: center; }
         }
     </style>
 </head>
@@ -681,7 +640,7 @@
                     </div>
                 </div>
 
-                <!-- LISTAS EXCLUSIVAS DE CONFIRMADOS SEPARADAS POR TIPO COM BOTÕES DE SALVAR INDIVIDUAIS -->
+                <!-- LISTAS EXCLUSIVAS DE CONFIRMADOS SEPARADAS POR TIPO -->
                 <div class="grid-half">
                     <div class="card" style="border-top: 4px solid var(--primary);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
@@ -697,7 +656,7 @@
                     <div class="card" style="border-top: 4px solid var(--accent);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <h3 style="margin-bottom: 0;">🥂 Confirmados: Cerimônia & Festa</h3>
+                                <h3 style="margin-bottom: 0;">🥂 Confirmados: Festa</h3>
                                 <span id="countConfFesta" class="badge confirmado" style="margin-top: 0; font-size: 0.85rem;">0</span>
                             </div>
                             <button onclick="baixarPDF('festa')" class="btn-secondary" style="width: auto; padding: 6px 14px; font-size: 0.8rem;">📄 Salvar PDF</button>
@@ -718,7 +677,7 @@
                             <option value="festa">🥂 Cerimônia & Festa</option>
                         </select>
                     </div>
-                    <ul id="listaConvidados" class="list-container"></ul>
+                    <ul id="listaConvidados" class="list-container" style="display: flex; flex-direction: column; gap: 12px;"></ul>
                 </div>
             </section>
 
@@ -822,7 +781,7 @@
 
                 <div class="card">
                     <h3>Compromissos & Tarefas Registradas</h3>
-                    <ul id="listaChecklist" class="list-container"></ul>
+                    <ul id="listaChecklist" class="list-container" style="display: flex; flex-direction: column; gap: 10px;"></ul>
                 </div>
             </section>
 
@@ -1116,7 +1075,7 @@
                 'festa': '🥂 Cerimônia & Festa'
             };
 
-            // RENDER DA LISTA GERAL
+            // RENDER DA LISTA GERAL EM FORMATO DE MINI-CARDS LIMPOS
             convidados.forEach((c, index) => {
                 const tipoItem = c.tipo === 'cerimonia' ? 'cerimonia' : 'festa';
                 
@@ -1126,25 +1085,36 @@
                 const badgeTipoTexto = rotulosTipo[tipoItem];
 
                 lista.innerHTML += `
-                <li>
-                    <div>
-                        <strong style="font-size: 1.05rem;">${c.nome}</strong><br>
-                        <span class="badge ${c.status}">${c.status === 'pendente' ? '⏳ Pendente' : c.status === 'confirmado' ? '✅ Confirmado' : '❌ Recusado'}</span>
-                        <span class="badge tipo-${tipoItem}">${badgeTipoTexto}</span>
-                    </div>
-                    <div class="guest-actions-group">
-                        <div class="action-row">
-                            <span class="action-label" style="align-self: center; margin-right: 4px;">Convite:</span>
-                            <button class="btn-outline" style="padding:4px 8px; font-size:0.75rem; ${tipoItem === 'cerimonia' ? 'background: var(--primary-light); font-weight:600;' : ''}" onclick="mudarTipo(${index}, 'cerimonia')">⛪ Cerimônia</button>
-                            <button class="btn-outline" style="padding:4px 8px; font-size:0.75rem; ${tipoItem === 'festa' ? 'background: var(--primary-light); font-weight:600;' : ''}" onclick="mudarTipo(${index}, 'festa')">🥂 Cerimônia & Festa</button>
+                <li style="display: flex; flex-direction: column; background: rgba(255,255,255,0.6); border-radius: var(--radius-md); padding: 16px; border: 1px solid rgba(197, 168, 128, 0.2); gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                        <div>
+                            <strong style="font-size: 1.05rem; color: var(--text-main);">${c.nome}</strong>
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
+                                <span class="badge ${c.status}">${c.status === 'pendente' ? '⏳ Pendente' : c.status === 'confirmado' ? '✅ Confirmado' : '❌ Recusado'}</span>
+                                <span class="badge tipo-${tipoItem}">${badgeTipoTexto}</span>
+                            </div>
                         </div>
-                        <div class="action-row">
-                            <span class="action-label" style="align-self: center; margin-right: 4px;">RSVP:</span>
-                            <button class="btn-outline" style="padding:4px 8px; font-size:0.75rem; border-color:${c.status === 'confirmado' ? 'var(--success)' : ''}" onclick="mudarStatus(${index}, 'confirmado')">✅ Confirmar</button>
-                            <button class="btn-outline" style="padding:4px 8px; font-size:0.75rem; border-color:${c.status === 'pendente' ? 'var(--warning)' : ''}" onclick="mudarStatus(${index}, 'pendente')">⏳ Pendente</button>
-                            <button class="btn-outline" style="padding:4px 8px; font-size:0.75rem; border-color:${c.status === 'recusado' ? 'var(--danger)' : ''}" onclick="mudarStatus(${index}, 'recusado')">❌ Recusar</button>
-                            <button class="btn-outline" style="padding:4px 8px; font-size:0.75rem; border-color: var(--primary-dark);" onclick="editarConvidado(${index})">✏️ Editar</button>
-                            <button class="btn-danger-light" style="padding:4px 8px; font-size:0.75rem;" onclick="removerConvidado(${index})">🗑️</button>
+                        <div style="display: flex; gap: 6px;">
+                            <button class="btn-outline" style="padding: 6px 10px; font-size: 0.8rem;" onclick="editarConvidado(${index})" title="Editar">✏️</button>
+                            <button class="btn-danger-light" style="padding: 6px 10px; font-size: 0.8rem;" onclick="removerConvidado(${index})" title="Excluir">🗑️</button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 10px; border-top: 1px dashed rgba(197, 168, 128, 0.2);">
+                        <div>
+                            <label style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Alterar Convite</label>
+                            <select onchange="mudarTipo(${index}, this.value)" style="margin-top: 2px; padding: 8px 10px; font-size: 0.85rem; height: 36px; background: white;">
+                                <option value="cerimonia" ${tipoItem === 'cerimonia' ? 'selected' : ''}>⛪ Cerimônia</option>
+                                <option value="festa" ${tipoItem === 'festa' ? 'selected' : ''}>🥂 Cerimônia & Festa</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Alterar Status</label>
+                            <select onchange="mudarStatus(${index}, this.value)" style="margin-top: 2px; padding: 8px 10px; font-size: 0.85rem; height: 36px; background: white;">
+                                <option value="pendente" ${c.status === 'pendente' ? 'selected' : ''}>⏳ Pendente</option>
+                                <option value="confirmado" ${c.status === 'confirmado' ? 'selected' : ''}>✅ Confirmado</option>
+                                <option value="recusado" ${c.status === 'recusado' ? 'selected' : ''}>❌ Recusado</option>
+                            </select>
                         </div>
                     </div>
                 </li>`;
@@ -1165,16 +1135,14 @@
                     if (c.status === "confirmado") {
                         const tipoItem = c.tipo === 'cerimonia' ? 'cerimonia' : 'festa';
                         const itemHtml = `
-                            <li style="padding: 10px 8px;">
+                            <li style="padding: 10px 8px; border-bottom: 1px solid rgba(197, 168, 128, 0.12);">
                                 <strong>${c.nome}</strong>
                             </li>
                         `;
 
-                        // Todos que estão confirmados vão para a lista de cerimônia
                         listaConfCerimonia.innerHTML += itemHtml;
                         countCerimoniaConf++;
 
-                        // Apenas convites de festa entram na lista de festa
                         if (tipoItem === 'festa') {
                             listaConfFesta.innerHTML += itemHtml;
                             countFestaConf++;
@@ -1186,14 +1154,13 @@
                     listaConfCerimonia.innerHTML = '<li style="color: var(--text-muted); font-size: 0.85rem; border: none; padding: 8px 0;">Nenhum convidado confirmado para cerimônia.</li>';
                 }
                 if (countFestaConf === 0) {
-                    listaConfFesta.innerHTML = '<li style="color: var(--text-muted); font-size: 0.85rem; border: none; padding: 8px 0;">Nenhum convidado confirmado para cerimônia & festa.</li>';
+                    listaConfFesta.innerHTML = '<li style="color: var(--text-muted); font-size: 0.85rem; border: none; padding: 8px 0;">Nenhum convidado confirmado para festa.</li>';
                 }
 
                 document.getElementById("countConfCerimonia").innerText = countCerimoniaConf;
                 document.getElementById("countConfFesta").innerText = countFestaConf;
             }
 
-            // ATUALIZAR CONTADORES GERAIS
             document.getElementById("totalConvidados").innerText = convidados.length;
             document.getElementById("totalConfirmados").innerText = convidados.filter(c => c.status === "confirmado").length;
 
@@ -1204,7 +1171,6 @@
             document.getElementById("totalFesta").innerText = countFesta;
         }
 
-        // FUNÇÃO DE PDF ADAPTADA PARA GERAR POR TIPO DE LISTA ESPECÍFICA
         function baixarPDF(tipoEspecifico = 'cerimonia') {
             const confirmados = convidados.filter(c => c.status === "confirmado");
 
@@ -1213,11 +1179,11 @@
             let nomeArquivo = "";
 
             if (tipoEspecifico === 'cerimonia') {
-                listaFiltrada = confirmados; // Todos os confirmados participam da Cerimônia
+                listaFiltrada = confirmados;
                 tituloRelatorio = "⛪ Confirmados: Cerimônia";
                 nomeArquivo = "confirmados-cerimonia.pdf";
             } else {
-                listaFiltrada = confirmados.filter(c => c.tipo === "festa"); // Apenas festa
+                listaFiltrada = confirmados.filter(c => c.tipo === "festa");
                 tituloRelatorio = "🥂 Confirmados: Cerimônia & Festa";
                 nomeArquivo = "confirmados-cerimonia-e-festa.pdf";
             }
@@ -1484,7 +1450,7 @@
                 ` : '';
 
                 lista.innerHTML += `
-                <li>
+                <li style="display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 14px 12px; background: rgba(255,255,255,0.5); border-radius: var(--radius-sm); border: 1px solid rgba(197, 168, 128, 0.15);">
                     <div style="flex: 1;">
                         <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.95rem;">
                             <input type="checkbox" ${item.concluido ? "checked" : ""} onchange="alternarChecklist(${index})" style="width:auto; margin-top:0;">
