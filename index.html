@@ -10,33 +10,115 @@
 
     <!-- Biblioteca para geração de PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Biblioteca Chart.js para Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        :root {
+        /* TEMA 1: LIGHT (Padrão Clássico) */
+        body.theme-light {
             --primary: #c5a880;
             --primary-light: #f5f0e6;
             --primary-dark: #7c6443;
             --accent: #d4af37;
             --surface: #ffffff;
             --bg-body: #fbf9f6;
-            
-            /* Glassmorphism Refinado */
             --bg-glass: rgba(255, 255, 255, 0.75);
             --border-glass: rgba(197, 168, 128, 0.18);
-            
             --text-main: #232120;
             --text-muted: #8a827c;
-            
+            --header-bg: linear-gradient(135deg, #161514 0%, #2c2825 100%);
+            --nav-bg: rgba(251, 249, 246, 0.85);
+        }
+
+        /* TEMA 2: DARK MODE */
+        body.theme-dark {
+            --primary: #d4af37;
+            --primary-light: #2c2822;
+            --primary-dark: #f3e5ab;
+            --accent: #e6c594;
+            --surface: #1e1e1e;
+            --bg-body: #121212;
+            --bg-glass: rgba(30, 30, 30, 0.75);
+            --border-glass: rgba(212, 175, 55, 0.18);
+            --text-main: #f0f0f0;
+            --text-muted: #aaaaaa;
+            --header-bg: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            --nav-bg: rgba(18, 18, 18, 0.85);
+        }
+
+        /* TEMA 3: ARCTIC MODE */
+        body.theme-arctic {
+            --primary: #3b82f6;
+            --primary-light: #eff6ff;
+            --primary-dark: #1d4ed8;
+            --accent: #60a5fa;
+            --surface: #ffffff;
+            --bg-body: #f0f4f8;
+            --bg-glass: rgba(255, 255, 255, 0.8);
+            --border-glass: rgba(59, 130, 246, 0.2);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --header-bg: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            --nav-bg: rgba(240, 244, 248, 0.85);
+        }
+
+        /* TEMA 4: CYBER NEON */
+        body.theme-cyber {
+            --primary: #00f0ff;
+            --primary-light: #12122b;
+            --primary-dark: #ff007f;
+            --accent: #00ff66;
+            --surface: #16162c;
+            --bg-body: #0a0a16;
+            --bg-glass: rgba(22, 22, 44, 0.75);
+            --border-glass: rgba(0, 240, 255, 0.3);
+            --text-main: #ffffff;
+            --text-muted: #a0a0c0;
+            --header-bg: linear-gradient(135deg, #05050d 0%, #1b0a2a 100%);
+            --nav-bg: rgba(10, 10, 22, 0.85);
+        }
+
+        /* TEMA 5: AQUA OCEAN */
+        body.theme-aqua {
+            --primary: #0ea5e9;
+            --primary-light: #e0f2fe;
+            --primary-dark: #0369a1;
+            --accent: #38bdf8;
+            --surface: #ffffff;
+            --bg-body: #f0fdf4;
+            --bg-glass: rgba(255, 255, 255, 0.75);
+            --border-glass: rgba(14, 165, 233, 0.2);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --header-bg: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
+            --nav-bg: rgba(240, 253, 244, 0.85);
+        }
+
+        /* TEMA 6: MIDNIGHT BLUE */
+        body.theme-midnight {
+            --primary: #38bdf8;
+            --primary-light: #1e293b;
+            --primary-dark: #94a3b8;
+            --accent: #818cf8;
+            --surface: #1e293b;
+            --bg-body: #0f172a;
+            --bg-glass: rgba(30, 41, 59, 0.8);
+            --border-glass: rgba(56, 189, 248, 0.2);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --header-bg: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+            --nav-bg: rgba(15, 23, 42, 0.85);
+        }
+
+        :root {
             --success: #2e7d32;
             --warning: #ed6c02;
             --danger: #d32f2f;
-            
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 12px;
-            
-            --shadow-sm: 0 4px 20px rgba(184, 144, 88, 0.04);
-            --shadow-md: 0 12px 40px rgba(184, 144, 88, 0.08);
+            --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 12px 40px rgba(0, 0, 0, 0.08);
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -53,17 +135,15 @@
 
         body {
             background-color: var(--bg-body);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(245, 240, 230, 0.6) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(197, 168, 128, 0.12) 0px, transparent 50%);
             color: var(--text-main);
             overflow-x: hidden;
             padding-bottom: 80px;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
         header {
-            background: linear-gradient(135deg, #161514 0%, #2c2825 100%);
+            background: var(--header-bg);
             color: white;
             text-align: center;
             padding: 70px 20px;
@@ -94,7 +174,7 @@
             position: sticky;
             top: 0;
             z-index: 999;
-            background: rgba(251, 249, 246, 0.85);
+            background: var(--nav-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-glass);
@@ -185,8 +265,8 @@
 
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 50px rgba(184, 144, 88, 0.12);
-            border-color: rgba(197, 168, 128, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary);
         }
 
         .card h3 {
@@ -221,19 +301,18 @@
             width: 100%;
             padding: 14px 18px;
             border-radius: var(--radius-md);
-            border: 1px solid rgba(197, 168, 128, 0.25);
+            border: 1px solid var(--border-glass);
             margin-top: 8px;
             outline: none;
             transition: var(--transition);
-            background: rgba(255, 255, 255, 0.6);
+            background: var(--surface);
             color: var(--text-main);
             font-size: 0.95rem;
         }
 
         input:focus, select:focus, textarea:focus {
             border-color: var(--primary-dark);
-            background: var(--surface);
-            box-shadow: 0 0 0 4px rgba(197, 168, 128, 0.15);
+            box-shadow: 0 0 0 4px var(--border-glass);
         }
 
         button {
@@ -246,7 +325,7 @@
             font-weight: 600;
             font-size: 0.95rem;
             letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #2c2825 0%, #161514 100%);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: var(--transition);
             display: inline-flex;
@@ -258,14 +337,10 @@
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            background: linear-gradient(135deg, #3d3733 0%, #232120 100%);
         }
 
         .btn-secondary {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-        }
-        .btn-secondary:hover {
-            background: linear-gradient(135deg, #d3b68e 0%, #866d4a 100%);
         }
 
         .btn-outline {
@@ -273,7 +348,7 @@
             padding: 8px 14px;
             color: var(--primary-dark);
             background: transparent;
-            border: 1px solid rgba(197, 168, 128, 0.4);
+            border: 1px solid var(--border-glass);
             box-shadow: none;
             font-size: 0.8rem;
             border-radius: var(--radius-sm);
@@ -282,13 +357,12 @@
         .btn-outline:hover {
             background: var(--primary-light);
             transform: none;
-            box-shadow: none;
         }
 
         .btn-danger-light {
             width: auto;
             padding: 8px 14px;
-            background: rgba(213, 47, 47, 0.06);
+            background: rgba(213, 47, 47, 0.08);
             color: var(--danger);
             box-shadow: none;
             font-size: 0.8rem;
@@ -299,7 +373,6 @@
             background: var(--danger);
             color: white;
             transform: none;
-            box-shadow: none;
         }
 
         .dashboard {
@@ -312,8 +385,8 @@
             text-align: left;
             padding: 24px;
             border-radius: var(--radius-md);
-            background: rgba(255, 255, 255, 0.45);
-            border: 1px solid rgba(197, 168, 128, 0.1);
+            background: var(--surface);
+            border: 1px solid var(--border-glass);
             transition: var(--transition);
             display: flex;
             flex-direction: column;
@@ -415,18 +488,6 @@
             width: 100%;
         }
 
-        .invitation-divider::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: -3px;
-            width: 7px;
-            height: 7px;
-            background: var(--primary);
-            border-radius: 50%;
-        }
-
-        /* Estilização para listas com rolagem interna */
         ul {
             list-style: none;
             margin-top: 10px;
@@ -449,21 +510,10 @@
             width: 6px;
         }
 
-        .list-container::-webkit-scrollbar-track,
-        .list-container-compact::-webkit-scrollbar-track {
-            background: rgba(197, 168, 128, 0.08);
-            border-radius: 10px;
-        }
-
         .list-container::-webkit-scrollbar-thumb,
         .list-container-compact::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 10px;
-        }
-
-        .list-container::-webkit-scrollbar-thumb:hover,
-        .list-container-compact::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
         }
 
         .badge {
@@ -479,18 +529,17 @@
             letter-spacing: 0.5px;
         }
 
-        .confirmado, .pago { background: rgba(46, 125, 50, 0.08); color: var(--success); }
-        .pendente, .parcial { background: rgba(237, 108, 2, 0.08); color: var(--warning); }
-        .recusado { background: rgba(211, 47, 47, 0.08); color: var(--danger); }
-
-        .tipo-cerimonia { background: rgba(197, 168, 128, 0.2); color: var(--primary-dark); }
-        .tipo-festa { background: rgba(212, 175, 55, 0.2); color: #7a5e00; }
+        .confirmado, .pago { background: rgba(46, 125, 50, 0.12); color: var(--success); }
+        .pendente, .parcial { background: rgba(237, 108, 2, 0.12); color: var(--warning); }
+        .recusado { background: rgba(211, 47, 47, 0.12); color: var(--danger); }
+        .tipo-cerimonia { background: var(--border-glass); color: var(--primary-dark); }
+        .tipo-festa { background: rgba(212, 175, 55, 0.2); color: var(--accent); }
 
         .progress {
             height: 6px;
             border-radius: 10px;
             overflow: hidden;
-            background: rgba(197, 168, 128, 0.15);
+            background: var(--border-glass);
             margin-top: 16px;
         }
 
@@ -507,7 +556,7 @@
             height: 8px;
             overflow: hidden;
             border-radius: 10px;
-            background: rgba(197, 168, 128, 0.15);
+            background: var(--border-glass);
             margin-top: 24px;
         }
 
@@ -518,7 +567,7 @@
             padding: 18px;
             margin-bottom: 14px;
             border-left: 3px solid var(--primary);
-            background: rgba(255, 255, 255, 0.5);
+            background: var(--surface);
             border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
             box-shadow: var(--shadow-sm);
             font-size: 0.95rem;
@@ -534,7 +583,7 @@
             display: flex;
             justify-content: space-between;
             padding-bottom: 12px;
-            border-bottom: 1px dashed rgba(197, 168, 128, 0.2);
+            border-bottom: 1px dashed var(--border-glass);
             font-size: 0.95rem;
         }
 
@@ -562,7 +611,7 @@
     </style>
 </head>
 
-<body>
+<body class="theme-light">
     <div id="app-content">
         <header>
             <h1>💍 Organizador de Casamento</h1>
@@ -574,7 +623,7 @@
             <button onclick="trocarAba(2)">💰 Orçamento</button>
             <button onclick="trocarAba(3)">📋 Checklist</button>
             <button onclick="trocarAba(4)">🔔 Lembretes</button>
-            <button onclick="trocarAba(5)">⚙️ Configurações & Backup</button>
+            <button onclick="trocarAba(5)">⚙️ Configurações & Relatórios</button>
         </nav>
 
         <main>
@@ -640,7 +689,6 @@
                     </div>
                 </div>
 
-                <!-- LISTAS EXCLUSIVAS DE CONFIRMADOS SEPARADAS POR TIPO -->
                 <div class="grid-half">
                     <div class="card" style="border-top: 4px solid var(--primary);">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
@@ -665,10 +713,8 @@
                     </div>
                 </div>
 
-                <!-- LISTA GERAL -->
                 <div class="card">
                     <h3 style="margin-bottom: 16px;">📋 Lista Nominativa Geral</h3>
-
                     <div class="form-row" style="margin-bottom: 15px;">
                         <input id="pesquisaConvidado" placeholder="🔎 Digite um nome para buscar..." onkeyup="renderConvidados()" style="margin-top: 0;">
                         <select id="filtroTipo" onchange="renderConvidados()" style="margin-top: 0;">
@@ -690,16 +736,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Categoria</label>
-                                <select id="categoria">
-                                    <option>Buffet</option>
-                                    <option>Decoração</option>
-                                    <option>Fotografia</option>
-                                    <option>Música</option>
-                                    <option>Vestido</option>
-                                    <option>Traje do Noivo</option>
-                                    <option>Alianças</option>
-                                    <option>Outros</option>
-                                </select>
+                                <select id="categoria"></select>
                             </div>
                             
                             <div class="form-group">
@@ -720,9 +757,21 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label>Data de Vencimento</label>
-                            <input id="vencimento" type="date">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Forma de Pagamento</label>
+                                <select id="formaPagamento">
+                                    <option value="Pix">Pix</option>
+                                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                    <option value="Boleto">Boleto Bancário</option>
+                                    <option value="Dinheiro">Dinheiro</option>
+                                    <option value="Transferência">Transferência Bancária</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Data de Vencimento</label>
+                                <input id="vencimento" type="date">
+                            </div>
                         </div>
                         
                         <button onclick="addItem()">Registrar Despesa</button>
@@ -741,6 +790,14 @@
                             <div class="graph-pago" id="barraPago"></div>
                             <div class="graph-pendente" id="barraPendente"></div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- CARD DE GRÁFICO VISUAL DE ORÇAMENTO -->
+                <div class="card">
+                    <h3>📊 Gráfico de Distribuição por Categoria</h3>
+                    <div style="position: relative; height: 300px; width: 100%;">
+                        <canvas id="graficoOrcamento"></canvas>
                     </div>
                 </div>
 
@@ -793,7 +850,7 @@
                 </div>
             </section>
 
-            <!-- 5. CONFIGURAÇÕES & BACKUP -->
+            <!-- 5. CONFIGURAÇÕES & RELATÓRIOS -->
             <section>
                 <div class="grid-half">
                     <div class="card">
@@ -815,18 +872,47 @@
                         <button onclick="salvarCasamento()" class="btn-secondary">Salvar Configurações</button>
                     </div>
 
+                    <div class="card">
+                        <h3>🎨 Personalização de Tema</h3>
+                        <div class="form-group">
+                            <label>Selecione o Estilo Visual do Aplicativo</label>
+                            <select id="seletorTema" onchange="mudarTema(this.value)">
+                                <option value="theme-light">✨ Light Mode (Clássico)</option>
+                                <option value="theme-dark">🌙 Dark Mode</option>
+                                <option value="theme-arctic">❄️ Arctic Mode</option>
+                                <option value="theme-cyber">⚡ Cyber Neon</option>
+                                <option value="theme-aqua">🌊 Aqua Ocean</option>
+                                <option value="theme-midnight">🌌 Midnight Blue</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-half">
+                    <!-- PERSONALIZAÇÃO DE CATEGORIAS DE ORÇAMENTO -->
+                    <div class="card">
+                        <h3>🏷️ Gerenciar Categorias de Orçamento</h3>
+                        <div class="form-group">
+                            <label>Nova Categoria</label>
+                            <input id="novaCategoriaInput" placeholder="Ex: Assessoria, Lua de Mel...">
+                        </div>
+                        <button onclick="adicionarCategoriaOrcamento()" class="btn-secondary" style="margin-bottom: 15px;">Adicionar Categoria</button>
+                        <div id="listaCategoriasCustom" style="max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"></div>
+                    </div>
+
                     <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
                         <div>
-                            <h3>💾 Segurança da Informação & Backup</h3>
-                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5;">
-                                Exporte seus dados locais em formato JSON ou restaure backups salvos anteriormente.
+                            <h3>💾 Segurança & Relatório Consolidado</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;">
+                                Exporte seu relatório executivo completo em PDF ou faça backup da base de dados.
                             </p>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <button onclick="baixarRelatorioGeralConsolidado()" class="btn-secondary">📄 Baixar Relatório Geral Consolidado (PDF)</button>
                             <button onclick="exportarBackup()">📥 Exportar Dados (.JSON)</button>
                             <div style="position: relative;">
                                 <input type="file" id="arquivoBackup" accept=".json" onchange="importarBackup(event)" style="margin-top: 0; display: none;">
-                                <button onclick="document.getElementById('arquivoBackup').click()" class="btn-secondary">📤 Importar Backup</button>
+                                <button onclick="document.getElementById('arquivoBackup').click()" class="btn-outline" style="width: 100%;">📤 Importar Backup</button>
                             </div>
                         </div>
                     </div>
@@ -850,8 +936,19 @@
         let convidados = carregarStorage("convidados", []);
         let orcamento = carregarStorage("orcamento", []);
         let checklist = carregarStorage("checklist", []);
-        
+        let categoriasOrcamento = carregarStorage("categoriasOrcamento", ["Buffet", "Decoração", "Fotografia", "Música", "Vestido", "Traje do Noivo", "Alianças", "Outros"]);
+        let temaAtual = localStorage.getItem("temaSelecionado") || "theme-light";
+
         let indiceEdicaoConvidado = null;
+        let chartInstance = null;
+
+        function mudarTema(tema) {
+            temaAtual = tema;
+            document.body.className = tema;
+            localStorage.setItem("temaSelecionado", tema);
+            const seletor = document.getElementById("seletorTema");
+            if (seletor) seletor.value = tema;
+        }
 
         function trocarAba(indice) {
             const secoes = document.querySelectorAll("section");
@@ -863,6 +960,10 @@
             botoes.forEach((botao, i) => {
                 botao.classList.toggle("active", i === indice);
             });
+
+            if (indice === 2) {
+                atualizarGraficoOrcamento();
+            }
         }
 
         function salvarCasamento() {
@@ -913,13 +1014,10 @@
             contador.innerHTML = `
                 <h1>${dias}</h1>
                 <p>Dias Restantes</p>
-                
                 <div class="premium-invitation">
                     <div class="invitation-row">
                         <div class="invitation-meta">
-                            <div class="invitation-icon">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            </div>
+                            <div class="invitation-icon">📅</div>
                             <div class="invitation-text">
                                 <span class="invitation-label">DATA</span>
                                 <span class="invitation-value">${dataFinalTexto}</span>
@@ -927,12 +1025,9 @@
                         </div>
                         <div class="invitation-divider"></div>
                     </div>
-
                     <div class="invitation-row">
                         <div class="invitation-meta">
-                            <div class="invitation-icon">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 16 14"></polyline></svg>
-                            </div>
+                            <div class="invitation-icon">🕒</div>
                             <div class="invitation-text">
                                 <span class="invitation-label">HORÁRIO</span>
                                 <span class="invitation-value">${casamento.hora ? casamento.hora.replace(':', 'h') : 'NÃO DEFINIDO'}</span>
@@ -940,18 +1035,14 @@
                         </div>
                         <div class="invitation-divider"></div>
                     </div>
-
                     <div class="invitation-row">
                         <div class="invitation-meta">
-                            <div class="invitation-icon">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            </div>
+                            <div class="invitation-icon">📍</div>
                             <div class="invitation-text">
                                 <span class="invitation-label">LOCAL</span>
                                 <span class="invitation-value">${casamento.local ? casamento.local.toUpperCase() : 'NÃO DEFINIDO'}</span>
                             </div>
                         </div>
-                        <div class="invitation-divider"></div>
                     </div>
                 </div>
             `;
@@ -959,7 +1050,6 @@
 
         function atualizarDashboard() {
             document.getElementById("dashConvidados").innerText = convidados.length;
-            
             const confirmados = convidados.filter(c => c.status === "confirmado").length;
             document.getElementById("dashConfirmados").innerText = confirmados;
 
@@ -969,6 +1059,53 @@
             const concluidas = checklist.filter(t => t.concluido).length;
             const percentual = checklist.length > 0 ? Math.round((concluidas / checklist.length) * 100) : 0;
             document.getElementById("dashChecklist").innerText = percentual + "%";
+        }
+
+        function renderCategoriasSelect() {
+            const select = document.getElementById("categoria");
+            if (!select) return;
+            select.innerHTML = "";
+            categoriasOrcamento.forEach(cat => {
+                select.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+
+            const listaCustom = document.getElementById("listaCategoriasCustom");
+            if (listaCustom) {
+                listaCustom.innerHTML = "";
+                categoriasOrcamento.forEach((cat, index) => {
+                    listaCustom.innerHTML += `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
+                            <span>${cat}</span>
+                            <button class="btn-danger-light" onclick="removerCategoriaOrcamento(${index})" style="padding: 4px 8px; font-size: 0.75rem;">🗑️</button>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function adicionarCategoriaOrcamento() {
+            const input = document.getElementById("novaCategoriaInput");
+            const val = input.value.trim();
+            if (!val) { alert("Digite o nome da categoria."); return; }
+            if (categoriasOrcamento.map(c => c.toLowerCase()).includes(val.toLowerCase())) {
+                alert("Esta categoria já existe.");
+                return;
+            }
+            categoriasOrcamento.push(val);
+            localStorage.setItem("categoriasOrcamento", JSON.stringify(categoriasOrcamento));
+            input.value = "";
+            renderCategoriasSelect();
+        }
+
+        function removerCategoriaOrcamento(index) {
+            if (categoriasOrcamento.length <= 1) {
+                alert("Você precisa manter pelo menos uma categoria.");
+                return;
+            }
+            if (!confirm(`Deseja remover a categoria "${categoriasOrcamento[index]}"?`)) return;
+            categoriasOrcamento.splice(index, 1);
+            localStorage.setItem("categoriasOrcamento", JSON.stringify(categoriasOrcamento));
+            renderCategoriasSelect();
         }
 
         function addConvidado() {
@@ -1026,19 +1163,14 @@
             document.getElementById("nomeConvidado").value = "";
             document.getElementById("statusConvidado").value = "pendente";
             document.getElementById("tipoConvidado").value = "cerimonia";
-
             document.getElementById("tituloFormConvidado").innerText = "👥 Cadastrar Convidado";
             document.getElementById("btnSalvarConvidado").innerText = "Adicionar à Lista";
             document.getElementById("btnCancelarEdicao").style.display = "none";
         }
 
         function removerConvidado(index) {
-            if (!confirm("Deseja realmente remover este convidado de forma permanente?")) return;
-            
-            if (indiceEdicaoConvidado === index) {
-                cancelarEdicaoConvidado();
-            }
-
+            if (!confirm("Deseja realmente remover este convidado?")) return;
+            if (indiceEdicaoConvidado === index) cancelarEdicaoConvidado();
             convidados.splice(index, 1);
             localStorage.setItem("convidados", JSON.stringify(convidados));
             renderConvidados();
@@ -1069,63 +1201,34 @@
             const filtroTipo = filtroTipoEl ? filtroTipoEl.value : 'todos';
             
             lista.innerHTML = "";
+            const rotulosTipo = { 'cerimonia': '⛪ Cerimônia', 'festa': '🥂 Cerimônia & Festa' };
 
-            const rotulosTipo = {
-                'cerimonia': '⛪ Cerimônia',
-                'festa': '🥂 Cerimônia & Festa'
-            };
-
-            // RENDER DA LISTA GERAL EM FORMATO DE MINI-CARDS LIMPOS
             convidados.forEach((c, index) => {
                 const tipoItem = c.tipo === 'cerimonia' ? 'cerimonia' : 'festa';
-                
                 if (filtro && !c.nome.toLowerCase().includes(filtro)) return;
                 if (filtroTipo !== 'todos' && tipoItem !== filtroTipo) return;
 
-                const badgeTipoTexto = rotulosTipo[tipoItem];
-
                 lista.innerHTML += `
-                <li style="display: flex; flex-direction: column; background: rgba(255,255,255,0.6); border-radius: var(--radius-md); padding: 16px; border: 1px solid rgba(197, 168, 128, 0.2); gap: 12px;">
+                <li style="display: flex; flex-direction: column; background: var(--surface); border-radius: var(--radius-md); padding: 16px; border: 1px solid var(--border-glass); gap: 12px;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
                         <div>
                             <strong style="font-size: 1.05rem; color: var(--text-main);">${c.nome}</strong>
                             <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
                                 <span class="badge ${c.status}">${c.status === 'pendente' ? '⏳ Pendente' : c.status === 'confirmado' ? '✅ Confirmado' : '❌ Recusado'}</span>
-                                <span class="badge tipo-${tipoItem}">${badgeTipoTexto}</span>
+                                <span class="badge tipo-${tipoItem}">${rotulosTipo[tipoItem]}</span>
                             </div>
                         </div>
                         <div style="display: flex; gap: 6px;">
-                            <button class="btn-outline" style="padding: 6px 10px; font-size: 0.8rem;" onclick="editarConvidado(${index})" title="Editar">✏️</button>
-                            <button class="btn-danger-light" style="padding: 6px 10px; font-size: 0.8rem;" onclick="removerConvidado(${index})" title="Excluir">🗑️</button>
-                        </div>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 10px; border-top: 1px dashed rgba(197, 168, 128, 0.2);">
-                        <div>
-                            <label style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Alterar Convite</label>
-                            <select onchange="mudarTipo(${index}, this.value)" style="margin-top: 2px; padding: 8px 10px; font-size: 0.85rem; height: 36px; background: white;">
-                                <option value="cerimonia" ${tipoItem === 'cerimonia' ? 'selected' : ''}>⛪ Cerimônia</option>
-                                <option value="festa" ${tipoItem === 'festa' ? 'selected' : ''}>🥂 Cerimônia & Festa</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Alterar Status</label>
-                            <select onchange="mudarStatus(${index}, this.value)" style="margin-top: 2px; padding: 8px 10px; font-size: 0.85rem; height: 36px; background: white;">
-                                <option value="pendente" ${c.status === 'pendente' ? 'selected' : ''}>⏳ Pendente</option>
-                                <option value="confirmado" ${c.status === 'confirmado' ? 'selected' : ''}>✅ Confirmado</option>
-                                <option value="recusado" ${c.status === 'recusado' ? 'selected' : ''}>❌ Recusado</option>
-                            </select>
+                            <button class="btn-outline" style="padding: 6px 10px; font-size: 0.8rem;" onclick="editarConvidado(${index})">✏️</button>
+                            <button class="btn-danger-light" style="padding: 6px 10px; font-size: 0.8rem;" onclick="removerConvidado(${index})">🗑️</button>
                         </div>
                     </div>
                 </li>`;
             });
 
-            // RENDER DAS LISTAS EXCLUSIVAS DE CONFIRMADOS
             const listaConfCerimonia = document.getElementById("listaConfirmadosCerimonia");
             const listaConfFesta = document.getElementById("listaConfirmadosFesta");
-            
-            let countCerimoniaConf = 0;
-            let countFestaConf = 0;
+            let countCerimoniaConf = 0, countFestaConf = 0;
 
             if (listaConfCerimonia && listaConfFesta) {
                 listaConfCerimonia.innerHTML = "";
@@ -1134,15 +1237,9 @@
                 convidados.forEach((c) => {
                     if (c.status === "confirmado") {
                         const tipoItem = c.tipo === 'cerimonia' ? 'cerimonia' : 'festa';
-                        const itemHtml = `
-                            <li style="padding: 10px 8px; border-bottom: 1px solid rgba(197, 168, 128, 0.12);">
-                                <strong>${c.nome}</strong>
-                            </li>
-                        `;
-
+                        const itemHtml = `<li style="padding: 10px 8px; border-bottom: 1px solid var(--border-glass);"><strong>${c.nome}</strong></li>`;
                         listaConfCerimonia.innerHTML += itemHtml;
                         countCerimoniaConf++;
-
                         if (tipoItem === 'festa') {
                             listaConfFesta.innerHTML += itemHtml;
                             countFestaConf++;
@@ -1150,12 +1247,8 @@
                     }
                 });
 
-                if (countCerimoniaConf === 0) {
-                    listaConfCerimonia.innerHTML = '<li style="color: var(--text-muted); font-size: 0.85rem; border: none; padding: 8px 0;">Nenhum convidado confirmado para cerimônia.</li>';
-                }
-                if (countFestaConf === 0) {
-                    listaConfFesta.innerHTML = '<li style="color: var(--text-muted); font-size: 0.85rem; border: none; padding: 8px 0;">Nenhum convidado confirmado para festa.</li>';
-                }
+                if (countCerimoniaConf === 0) listaConfCerimonia.innerHTML = '<li style="color: var(--text-muted); font-size: 0.85rem; border: none; padding: 8px 0;">Nenhum confirmado.</li>';
+                if (countFestaConf === 0) listaConfFesta.innerHTML = '<li style="color: var(--text-muted); font-size: 0.85rem; border: none; padding: 8px 0;">Nenhum confirmado.</li>';
 
                 document.getElementById("countConfCerimonia").innerText = countCerimoniaConf;
                 document.getElementById("countConfFesta").innerText = countFestaConf;
@@ -1163,110 +1256,49 @@
 
             document.getElementById("totalConvidados").innerText = convidados.length;
             document.getElementById("totalConfirmados").innerText = convidados.filter(c => c.status === "confirmado").length;
-
-            const countCerimonia = convidados.filter(c => c.tipo === 'cerimonia').length;
-            const countFesta = convidados.filter(c => c.tipo === 'festa' || !c.tipo).length;
-            
-            document.getElementById("totalCerimonia").innerText = countCerimonia;
-            document.getElementById("totalFesta").innerText = countFesta;
+            document.getElementById("totalCerimonia").innerText = convidados.filter(c => c.tipo === 'cerimonia').length;
+            document.getElementById("totalFesta").innerText = convidados.filter(c => c.tipo === 'festa' || !c.tipo).length;
         }
 
         function baixarPDF(tipoEspecifico = 'cerimonia') {
             const confirmados = convidados.filter(c => c.status === "confirmado");
+            const listaFiltrada = tipoEspecifico === 'cerimonia' ? confirmados : confirmados.filter(c => c.tipo === "festa");
+            const tituloRelatorio = tipoEspecifico === 'cerimonia' ? "⛪ Confirmados: Cerimônia" : "🥂 Confirmados: Cerimônia & Festa";
 
-            let listaFiltrada = [];
-            let tituloRelatorio = "";
-            let nomeArquivo = "";
-
-            if (tipoEspecifico === 'cerimonia') {
-                listaFiltrada = confirmados;
-                tituloRelatorio = "⛪ Confirmados: Cerimônia";
-                nomeArquivo = "confirmados-cerimonia.pdf";
-            } else {
-                listaFiltrada = confirmados.filter(c => c.tipo === "festa");
-                tituloRelatorio = "🥂 Confirmados: Cerimônia & Festa";
-                nomeArquivo = "confirmados-cerimonia-e-festa.pdf";
-            }
-
-            if (listaFiltrada.length === 0) {
-                alert(`Não há convidados confirmados nesta lista para gerar o PDF.`);
-                return;
-            }
+            if (listaFiltrada.length === 0) { alert("Não há convidados confirmados."); return; }
 
             const elemento = document.createElement("div");
             elemento.style.padding = "25px";
             elemento.style.fontFamily = "Arial, sans-serif";
             elemento.style.color = "#232120";
 
-            const dataFormatada = casamento.data ? casamento.data.split('-').reverse().join('/') : 'Não informada';
-            const localFormatado = casamento.local ? casamento.local : 'Não informado';
-
-            let html = `
+            elemento.innerHTML = `
                 <div style="text-align: center; border-bottom: 2px solid #c5a880; padding-bottom: 15px; margin-bottom: 20px;">
                     <h1 style="color: #7c6443; font-size: 22px; margin-bottom: 5px; text-transform: uppercase;">${tituloRelatorio}</h1>
-                    <p style="font-size: 13px; color: #666; margin-top: 5px;">
-                        <strong>Data:</strong> ${dataFormatada} | <strong>Horário:</strong> ${casamento.hora || 'Não informado'} | <strong>Local:</strong> ${localFormatado}
-                    </p>
-                    <p style="font-size: 12px; color: #2e7d32; margin-top: 6px; font-weight: bold;">
-                        Total de Presenças Confirmadas: ${listaFiltrada.length}
-                    </p>
+                    <p style="font-size: 13px; color: #666;">Data: ${casamento.data || 'N/D'} | Local: ${casamento.local || 'N/D'}</p>
+                    <p style="font-size: 12px; color: #2e7d32; font-weight: bold;">Total: ${listaFiltrada.length}</p>
                 </div>
-
-                <div style="margin-bottom: 25px;">
-                    <ol style="font-size: 13px; padding-left: 20px; line-height: 1.8;">
-                        ${listaFiltrada.map(c => `<li><strong>${c.nome}</strong> ${tipoEspecifico === 'cerimonia' && c.tipo === 'festa' ? '<span style="color: #7c6443; font-size: 11px;">(Cerimônia & Festa)</span>' : ''}</li>`).join('')}
-                    </ol>
-                </div>
+                <ol style="font-size: 13px; padding-left: 20px; line-height: 1.8;">
+                    ${listaFiltrada.map(c => `<li><strong>${c.nome}</strong></li>`).join('')}
+                </ol>
             `;
 
-            elemento.innerHTML = html;
-
-            const opcoes = {
-                margin:       10,
-                filename:     nomeArquivo,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            if (typeof html2pdf !== 'undefined') {
-                html2pdf().set(opcoes).from(elemento).save();
-            } else {
-                const janelaImpressao = window.open('', '', 'height=700,width=900');
-                janelaImpressao.document.write('<html><head><title>' + tituloRelatorio + '</title></head><body>');
-                janelaImpressao.document.write(html);
-                janelaImpressao.document.write('</body></html>');
-                janelaImpressao.document.close();
-                janelaImpressao.print();
-            }
+            html2pdf().set({ margin: 10, filename: `confirmados-${tipoEspecifico}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4' } }).from(elemento).save();
         }
 
         function addItem() {
             const categoria = document.getElementById("categoria").value;
             const descricao = document.getElementById("descricao").value.trim();
-
-            const valor = parseFloat(
-                document.getElementById("valor").value.replace(",", ".")
-            );
-
-            const valorPago = parseFloat(
-                document.getElementById("valorPago").value.replace(",", ".") || 0
-            );
-
+            const valor = parseFloat(document.getElementById("valor").value.replace(",", "."));
+            const valorPago = parseFloat(document.getElementById("valorPago").value.replace(",", ".") || 0);
+            const formaPagamento = document.getElementById("formaPagamento").value;
             const vencimento = document.getElementById("vencimento").value;
 
             if (!descricao) { alert("Digite uma descrição."); return; }
             if (isNaN(valor) || valor <= 0) { alert("Informe um valor válido."); return; }
-            if (!isNaN(valorPago) && valorPago > valor) { alert("Valor pago não pode ser maior que o valor total."); return; }
+            if (valorPago > valor) { alert("Valor pago não pode ser maior que o total."); return; }
 
-            orcamento.push({
-                categoria,
-                descricao,
-                valor,
-                valorPago: isNaN(valorPago) ? 0 : valorPago,
-                vencimento
-            });
-
+            orcamento.push({ categoria, descricao, valor, valorPago, formaPagamento, vencimento });
             localStorage.setItem("orcamento", JSON.stringify(orcamento));
 
             document.getElementById("descricao").value = "";
@@ -1277,17 +1309,53 @@
             renderOrcamento();
             atualizarDashboard();
             renderLembretes();
-
-            alert("Despesa cadastrada com sucesso!");
-        }   
+            alert("Despesa cadastrada!");
+        }
 
         function removerItem(index) {
-            if (!confirm("Remover esta despesa do balanço financeiro?")) return;
+            if (!confirm("Remover esta despesa?")) return;
             orcamento.splice(index, 1);
             localStorage.setItem("orcamento", JSON.stringify(orcamento));
             renderOrcamento();
             atualizarDashboard();
             renderLembretes();
+        }
+
+        function atualizarGraficoOrcamento() {
+            const ctx = document.getElementById('graficoOrcamento');
+            if (!ctx) return;
+
+            const somasCat = {};
+            categoriasOrcamento.forEach(c => somasCat[c] = 0);
+            orcamento.forEach(item => {
+                if (!somasCat[item.categoria]) somasCat[item.categoria] = 0;
+                somasCat[item.categoria] += Number(item.valor || 0);
+            });
+
+            const labels = Object.keys(somasCat);
+            const dataVals = Object.values(somasCat);
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataVals,
+                        backgroundColor: ['#c5a880', '#d4af37', '#2e7d32', '#ed6c02', '#3b82f6', '#8b5cf6', '#ec4899', '#64748b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
         }
 
         function renderOrcamento() {
@@ -1307,40 +1375,22 @@
 
                 const status = itemValorPago >= itemValor ? "pago" : (itemValorPago > 0 ? "parcial" : "pendente");
 
-                const campoPagamentoInline = restante > 0 ? `
-                    <div style="margin-top: 15px; border-top: 1px dashed rgba(197, 168, 128, 0.2); padding-top: 12px;">
-                        <label style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Registrar Nova Parcela</label>
-                        <div style="display: flex; gap: 8px; margin-top: 4px;">
-                            <input type="number" id="inputPgto-${index}" step="0.01" placeholder="R$ 0,00" 
-                                   style="margin-top: 0; padding: 10px 14px; font-size: 0.9rem; flex: 1; height: 42px;">
-                            <button onclick="adicionarParcela(${index})" class="btn-secondary" 
-                                    style="width: auto; padding: 0 16px; font-size: 0.85rem; height: 42px; white-space: nowrap;">
-                                Pagar
-                            </button>
-                        </div>
-                    </div>
-                ` : `
-                    <div style="margin-top: 15px; text-align: center; color: var(--success); font-size: 0.85rem; font-weight: 600; padding: 8px; background: rgba(46, 125, 50, 0.05); border-radius: 8px;">
-                        🎉 Item Totalmente Quitado!
-                    </div>
-                `;
-
                 lista.innerHTML += `
                 <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
-                        <span class="badge ${status}">${status}</span>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            <span class="badge ${status}">${status}</span>
+                            <span class="badge" style="background: var(--border-glass); color: var(--text-main);">💳 ${item.formaPagamento || 'Pix'}</span>
+                        </div>
                         <h4 style="margin-top:14px; color: var(--primary-dark); font-weight:600;">${item.categoria}</h4>
                         <p style="font-size:0.9rem; margin: 4px 0 12px 0; color: var(--text-main);">${item.descricao}</p>
                         
-                        <div style="font-size: 0.9rem; background:rgba(0,0,0,0.03); padding: 12px; border-radius:10px;">
+                        <div style="font-size: 0.9rem; background:var(--surface); padding: 12px; border-radius:10px; border: 1px solid var(--border-glass);">
                             <div style="margin-bottom:6px;">Total: <strong>R$ ${itemValor.toFixed(2).replace('.', ',')}</strong></div>
                             <div style="margin-bottom:6px;">Pago: <strong style="color:var(--success)">R$ ${itemValorPago.toFixed(2).replace('.', ',')}</strong></div>
                             <div>Restante: <strong style="color:${restante > 0 ? 'var(--warning)' : 'var(--text-muted)'}">R$ ${restante.toFixed(2).replace('.', ',')}</strong></div>
                         </div>
-                        
-                        ${campoPagamentoInline}
                     </div>
-                    
                     <button class="btn-danger-light" style="width:100%; padding:10px; margin-top: 15px;" onclick="removerItem(${index})">Excluir Registro</button>
                 </div>`;
             });
@@ -1360,33 +1410,8 @@
                 if (barraPago) barraPago.style.width = "0%";
                 if (barraPendente) barraPendente.style.width = "0%";
             }
-        }
 
-        function adicionarParcela(index) {
-            const input = document.getElementById(`inputPgto-${index}`);
-            if (!input) return;
-
-            const valorNovaParcela = parseFloat(input.value.replace(",", "."));
-
-            if (isNaN(valorNovaParcela) || valorNovaParcela <= 0) {
-                alert("Por favor, informe um valor válido para a parcela.");
-                return;
-            }
-
-            const item = orcamento[index];
-            const restante = Number(item.valor || 0) - Number(item.valorPago || 0);
-
-            if (valorNovaParcela > restante) {
-                alert(`O valor digitado (R$ ${valorNovaParcela.toFixed(2).replace('.', ',')}) é maior do que o restante a pagar (R$ ${restante.toFixed(2).replace('.', ',')}).`);
-                return;
-            }
-
-            orcamento[index].valorPago = Number(orcamento[index].valorPago || 0) + valorNovaParcela;
-            localStorage.setItem("orcamento", JSON.stringify(orcamento));
-
-            renderOrcamento();
-            atualizarDashboard();
-            renderLembretes();
+            atualizarGraficoOrcamento();
         }
 
         function addChecklist() {
@@ -1396,27 +1421,12 @@
             const inputLocal = document.getElementById("localTarefa");
 
             const tarefa = input.value.trim();
-            const data = inputData.value;
-            const hora = inputHora.value;
-            const local = inputLocal.value.trim();
-
             if (!tarefa) { alert("Informe a descrição do objetivo."); return; }
 
-            checklist.push({ 
-                tarefa, 
-                concluido: false,
-                data,
-                hora,
-                local
-            });
-            
+            checklist.push({ tarefa, concluido: false, data: inputData.value, hora: inputHora.value, local: inputLocal.value.trim() });
             localStorage.setItem("checklist", JSON.stringify(checklist));
             
-            input.value = "";
-            inputData.value = "";
-            inputHora.value = "";
-            inputLocal.value = "";
-            
+            input.value = ""; inputData.value = ""; inputHora.value = ""; inputLocal.value = "";
             renderChecklist();
         }
 
@@ -1439,24 +1449,13 @@
 
             checklist.forEach((item, index) => {
                 if (item.concluido) concluidas++;
-                
-                const temInfoAdicional = item.data || item.hora || item.local;
-                const infoHtml = temInfoAdicional ? `
-                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-left: 28px; margin-top: 4px; line-height: 1.4;">
-                        ${item.data ? `📅 ${item.data.split('-').reverse().join('/')}` : ''}
-                        ${item.hora ? ` 🕒 ${item.hora}` : ''}
-                        ${item.local ? ` 📍 ${item.local}` : ''}
-                    </div>
-                ` : '';
-
                 lista.innerHTML += `
-                <li style="display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 14px 12px; background: rgba(255,255,255,0.5); border-radius: var(--radius-sm); border: 1px solid rgba(197, 168, 128, 0.15);">
+                <li style="display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 14px 12px; background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
                     <div style="flex: 1;">
                         <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.95rem;">
                             <input type="checkbox" ${item.concluido ? "checked" : ""} onchange="alternarChecklist(${index})" style="width:auto; margin-top:0;">
                             <span style="${item.concluido ? 'text-decoration: line-through; color: var(--text-muted);' : ''}"><strong>${item.tarefa}</strong></span>
                         </label>
-                        ${infoHtml}
                     </div>
                     <button class="btn-danger-light" onclick="removerChecklist(${index})">Remover</button>
                 </li>`;
@@ -1469,7 +1468,7 @@
         }
 
         function exportarBackup() {
-            const dados = { casamento, convidados, orcamento, checklist };
+            const dados = { casamento, convidados, orcamento, checklist, categoriasOrcamento, temaAtual };
             const blob = new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" });
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
@@ -1480,29 +1479,71 @@
         function importarBackup(event) {
             const arquivo = event.target.files[0];
             if (!arquivo) return;
-
             const leitor = new FileReader();
             leitor.onload = function(e) {
                 try {
                     const dados = JSON.parse(e.target.result);
-                    
                     casamento = dados.casamento || {};
                     convidados = dados.convidados || [];
                     orcamento = dados.orcamento || [];
                     checklist = dados.checklist || [];
+                    categoriasOrcamento = dados.categoriasOrcamento || categoriasOrcamento;
+                    temaAtual = dados.temaAtual || "theme-light";
 
                     localStorage.setItem("casamento", JSON.stringify(casamento));
                     localStorage.setItem("convidados", JSON.stringify(convidados));
                     localStorage.setItem("orcamento", JSON.stringify(orcamento));
                     localStorage.setItem("checklist", JSON.stringify(checklist));
+                    localStorage.setItem("categoriasOrcamento", JSON.stringify(categoriasOrcamento));
+                    localStorage.setItem("temaSelecionado", temaAtual);
 
                     carregarDados();
-                    alert("Base de dados restaurada com sucesso!");
+                    alert("Backup restaurado com sucesso!");
                 } catch {
-                    alert("O arquivo selecionado não contém uma estrutura de backup válida.");
+                    alert("Arquivo de backup inválido.");
                 }
             };
             leitor.readAsText(arquivo);
+        }
+
+        function baixarRelatorioGeralConsolidado() {
+            const totalGastos = orcamento.reduce((s, i) => s + Number(i.valor || 0), 0);
+            const totalPago = orcamento.reduce((s, i) => s + Number(i.valorPago || 0), 0);
+            const confirmados = convidados.filter(c => c.status === "confirmado").length;
+            const concluidas = checklist.filter(t => t.concluido).length;
+            const percentualCheck = checklist.length ? Math.round((concluidas / checklist.length) * 100) : 0;
+
+            const elemento = document.createElement("div");
+            elemento.style.padding = "30px";
+            elemento.style.fontFamily = "Arial, sans-serif";
+            elemento.style.color = "#232120";
+
+            elemento.innerHTML = `
+                <div style="text-align: center; border-bottom: 2px solid #c5a880; padding-bottom: 20px; margin-bottom: 25px;">
+                    <h1 style="color: #7c6443; font-size: 24px; text-transform: uppercase; margin-bottom: 5px;">Relatório Geral Consolidado</h1>
+                    <p style="font-size: 14px; color: #666;">Data do Evento: ${casamento.data || 'Não informada'} | Local: ${casamento.local || 'Não informado'}</p>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #7c6443; font-size: 16px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">1. Resumo de Convidados</h3>
+                    <p style="font-size: 13px; margin-top: 8px;">Total na Lista: <strong>${convidados.length}</strong></p>
+                    <p style="font-size: 13px;">Presenças Confirmadas (RSVP): <strong>${confirmados}</strong></p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #7c6443; font-size: 16px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">2. Resumo Financeiro</h3>
+                    <p style="font-size: 13px; margin-top: 8px;">Custo Total Contratado: <strong>R$ ${totalGastos.toFixed(2).replace('.', ',')}</strong></p>
+                    <p style="font-size: 13px;">Montante Pago: <strong>R$ ${totalPago.toFixed(2).replace('.', ',')}</strong></p>
+                    <p style="font-size: 13px;">Saldo Devedor: <strong>R$ ${(totalGastos - totalPago).toFixed(2).replace('.', ',')}</strong></p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #7c6443; font-size: 16px; border-bottom: 1px solid #ddd; padding-bottom: 5px;">3. Progresso do Checklist</h3>
+                    <p style="font-size: 13px; margin-top: 8px;">Metas Concluídas: <strong>${concluidas} de ${checklist.length} (${percentualCheck}%)</strong></p>
+                </div>
+            `;
+
+            html2pdf().set({ margin: 10, filename: `relatorio-geral-casamento.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4' } }).from(elemento).save();
         }
 
         function renderLembretes() {
@@ -1512,38 +1553,34 @@
 
             const pendentes = convidados.filter(c => c.status === "pendente").length;
             if (pendentes > 0) {
-                div.innerHTML += `<div class="alerta">⚠️ Há <strong>${pendentes} convidados</strong> aguardando confirmação de presença (RSVP).</div>`;
+                div.innerHTML += `<div class="alerta">⚠️ Há <strong>${pendentes} convidados</strong> aguardando confirmação (RSVP).</div>`;
             }
 
             orcamento.forEach(item => {
                 if (Number(item.valorPago || 0) < Number(item.valor || 0)) {
-                    div.innerHTML += `<div class="alerta">💰 Há parcelas em aberto para o item: <strong>${item.descricao}</strong> (${item.categoria}).</div>`;
+                    div.innerHTML += `<div class="alerta">💰 Há parcelas em aberto para o item: <strong>${item.descricao}</strong> (${item.categoria}) via ${item.formaPagamento || 'Pix'}.</div>`;
                 }
             });
 
             if (div.innerHTML === "") {
-                div.innerHTML = `<div class="alerta" style="border-left-color: var(--success)">🎉 Tudo certo! Sem nenhuma pendência crítica ativa no momento.</div>`;
+                div.innerHTML = `<div class="alerta" style="border-left-color: var(--success)">🎉 Tudo certo! Sem nenhuma pendência crítica ativa.</div>`;
             }
         }
 
         function carregarDados() {
+            mudarTema(temaAtual);
             if (casamento && casamento.data) {
                 document.getElementById("dataCasamento").value = casamento.data || "";
                 document.getElementById("horaCasamento").value = casamento.hora || "";
                 document.getElementById("localCasamento").value = casamento.local || "";
             }
+            renderCategoriasSelect();
             atualizarContador();
             renderConvidados();
             renderOrcamento();
             renderChecklist();
             renderLembretes();
             atualizarDashboard();
-        }
-
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("sw.js").catch(() => {});
-            });
         }
 
         window.addEventListener("DOMContentLoaded", carregarDados);
