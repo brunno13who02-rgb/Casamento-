@@ -359,6 +359,22 @@
             transform: none;
         }
 
+        .btn-success-light {
+            width: auto;
+            padding: 8px 14px;
+            background: rgba(46, 125, 50, 0.08);
+            color: var(--success);
+            box-shadow: none;
+            font-size: 0.8rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .btn-success-light:hover {
+            background: var(--success);
+            color: white;
+            transform: none;
+        }
+
         .btn-danger-light {
             width: auto;
             padding: 8px 14px;
@@ -674,7 +690,7 @@
                         </div>
                         <div style="display: flex; gap: 10px;">
                             <button id="btnSalvarConvidado" onclick="addConvidado()">Adicionar à Lista</button>
-                            <button id="btnCancelarEdicao" class="btn-danger-light" onclick="cancelarEdicaoConvidado()" style="display:none; width: auto; white-space: nowrap;">Cancelar</button>
+                            <button id="btnCancelarEdicaoConvidado" class="btn-danger-light" onclick="cancelarEdicaoConvidado()" style="display:none; width: auto; white-space: nowrap;">Cancelar</button>
                         </div>
                     </div>
 
@@ -730,8 +746,8 @@
             <!-- 2. ORÇAMENTO -->
             <section>
                 <div class="grid-half">
-                    <div class="card">
-                        <h3>💰 Lançar Nova Despesa</h3>
+                    <div class="card" id="cardFormOrcamento">
+                        <h3 id="tituloFormOrcamento">💰 Lançar Nova Despesa</h3>
                         
                         <div class="form-row">
                             <div class="form-group">
@@ -774,7 +790,10 @@
                             </div>
                         </div>
                         
-                        <button onclick="addItem()">Registrar Despesa</button>
+                        <div style="display: flex; gap: 10px;">
+                            <button id="btnSalvarOrcamento" onclick="addItem()">Registrar Despesa</button>
+                            <button id="btnCancelarEdicaoOrcamento" class="btn-danger-light" onclick="cancelarEdicaoOrcamento()" style="display:none; width: auto; white-space: nowrap;">Cancelar</button>
+                        </div>
                     </div>
 
                     <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -940,6 +959,7 @@
         let temaAtual = localStorage.getItem("temaSelecionado") || "theme-light";
 
         let indiceEdicaoConvidado = null;
+        let indiceEdicaoOrcamento = null;
         let chartInstance = null;
 
         function mudarTema(tema) {
@@ -1149,7 +1169,7 @@
 
             document.getElementById("tituloFormConvidado").innerText = "✏️ Editar Convidado";
             document.getElementById("btnSalvarConvidado").innerText = "💾 Salvar Alterações";
-            document.getElementById("btnCancelarEdicao").style.display = "inline-flex";
+            document.getElementById("btnCancelarEdicaoConvidado").style.display = "inline-flex";
 
             document.getElementById("cardFormConvidado").scrollIntoView({ behavior: 'smooth' });
         }
@@ -1165,29 +1185,13 @@
             document.getElementById("tipoConvidado").value = "cerimonia";
             document.getElementById("tituloFormConvidado").innerText = "👥 Cadastrar Convidado";
             document.getElementById("btnSalvarConvidado").innerText = "Adicionar à Lista";
-            document.getElementById("btnCancelarEdicao").style.display = "none";
+            document.getElementById("btnCancelarEdicaoConvidado").style.display = "none";
         }
 
         function removerConvidado(index) {
             if (!confirm("Deseja realmente remover este convidado?")) return;
             if (indiceEdicaoConvidado === index) cancelarEdicaoConvidado();
             convidados.splice(index, 1);
-            localStorage.setItem("convidados", JSON.stringify(convidados));
-            renderConvidados();
-            atualizarDashboard();
-            renderLembretes();
-        }
-
-        function mudarStatus(index, novoStatus) {
-            convidados[index].status = novoStatus;
-            localStorage.setItem("convidados", JSON.stringify(convidados));
-            renderConvidados();
-            atualizarDashboard();
-            renderLembretes();
-        }
-
-        function mudarTipo(index, novoTipo) {
-            convidados[index].tipo = novoTipo;
             localStorage.setItem("convidados", JSON.stringify(convidados));
             renderConvidados();
             atualizarDashboard();
@@ -1298,22 +1302,102 @@
             if (isNaN(valor) || valor <= 0) { alert("Informe um valor válido."); return; }
             if (valorPago > valor) { alert("Valor pago não pode ser maior que o total."); return; }
 
-            orcamento.push({ categoria, descricao, valor, valorPago, formaPagamento, vencimento });
-            localStorage.setItem("orcamento", JSON.stringify(orcamento));
+            if (indiceEdicaoOrcamento !== null) {
+                orcamento[indiceEdicaoOrcamento] = { categoria, descricao, valor, valorPago, formaPagamento, vencimento };
+                indiceEdicaoOrcamento = null;
+                resetarFormularioOrcamento();
+            } else {
+                orcamento.push({ categoria, descricao, valor, valorPago, formaPagamento, vencimento });
+                document.getElementById("descricao").value = "";
+                document.getElementById("valor").value = "";
+                document.getElementById("valorPago").value = "";
+                document.getElementById("vencimento").value = "";
+            }
 
+            localStorage.setItem("orcamento", JSON.stringify(orcamento));
+            renderOrcamento();
+            atualizarDashboard();
+            renderLembretes();
+            alert("Despesa salva com sucesso!");
+        }
+
+        function editarOrcamento(index) {
+            const item = orcamento[index];
+            if (!item) return;
+
+            indiceEdicaoOrcamento = index;
+            document.getElementById("categoria").value = item.categoria;
+            document.getElementById("descricao").value = item.descricao;
+            document.getElementById("valor").value = item.valor;
+            document.getElementById("valorPago").value = item.valorPago;
+            document.getElementById("formaPagamento").value = item.formaPagamento || "Pix";
+            document.getElementById("vencimento").value = item.vencimento || "";
+
+            document.getElementById("tituloFormOrcamento").innerText = "✏️ Editar Despesa";
+            document.getElementById("btnSalvarOrcamento").innerText = "💾 Salvar Alterações";
+            document.getElementById("btnCancelarEdicaoOrcamento").style.display = "inline-flex";
+
+            document.getElementById("cardFormOrcamento").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function pagarRestanteOrcamento(index) {
+            const item = orcamento[index];
+            if (!item) return;
+            item.valorPago = item.valor;
+            localStorage.setItem("orcamento", JSON.stringify(orcamento));
+            renderOrcamento();
+            atualizarDashboard();
+            renderLembretes();
+            alert(`Despesa "${item.descricao}" marcada como totalmente paga!`);
+        }
+
+        function pagarParteOrcamento(index) {
+            const item = orcamento[index];
+            if (!item) return;
+            const itemValor = Number(item.valor || 0);
+            const itemValorPago = Number(item.valorPago || 0);
+            const restante = itemValor - itemValorPago;
+
+            const valorStr = prompt(`Quanto deseja pagar desta despesa? (Restante: R$ ${restante.toFixed(2).replace('.', ',')})`);
+            if (valorStr === null) return;
+
+            const valorAdicional = parseFloat(valorStr.replace(",", "."));
+            if (isNaN(valorAdicional) || valorAdicional <= 0) {
+                alert("Informe um valor válido.");
+                return;
+            }
+
+            if (itemValorPago + valorAdicional > itemValor) {
+                alert("O valor pago total não pode ser maior que o valor total da despesa.");
+                return;
+            }
+
+            item.valorPago = itemValorPago + valorAdicional;
+            localStorage.setItem("orcamento", JSON.stringify(orcamento));
+            renderOrcamento();
+            atualizarDashboard();
+            renderLembretes();
+            alert(`Pagamento parcial de R$ ${valorAdicional.toFixed(2).replace('.', ',')} registrado com sucesso!`);
+        }
+
+        function cancelarEdicaoOrcamento() {
+            indiceEdicaoOrcamento = null;
+            resetarFormularioOrcamento();
+        }
+
+        function resetarFormularioOrcamento() {
             document.getElementById("descricao").value = "";
             document.getElementById("valor").value = "";
             document.getElementById("valorPago").value = "";
             document.getElementById("vencimento").value = "";
-
-            renderOrcamento();
-            atualizarDashboard();
-            renderLembretes();
-            alert("Despesa cadastrada!");
+            document.getElementById("tituloFormOrcamento").innerText = "💰 Lançar Nova Despesa";
+            document.getElementById("btnSalvarOrcamento").innerText = "Registrar Despesa";
+            document.getElementById("btnCancelarEdicaoOrcamento").style.display = "none";
         }
 
         function removerItem(index) {
             if (!confirm("Remover esta despesa?")) return;
+            if (indiceEdicaoOrcamento === index) cancelarEdicaoOrcamento();
             orcamento.splice(index, 1);
             localStorage.setItem("orcamento", JSON.stringify(orcamento));
             renderOrcamento();
@@ -1391,7 +1475,14 @@
                             <div>Restante: <strong style="color:${restante > 0 ? 'var(--warning)' : 'var(--text-muted)'}">R$ ${restante.toFixed(2).replace('.', ',')}</strong></div>
                         </div>
                     </div>
-                    <button class="btn-danger-light" style="width:100%; padding:10px; margin-top: 15px;" onclick="removerItem(${index})">Excluir Registro</button>
+                    <div style="display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap;">
+                        ${restante > 0 ? `
+                            <button class="btn-success-light" style="flex: 1; padding: 10px; font-size: 0.8rem;" onclick="pagarParteOrcamento(${index})">➕ Pagar Parte</button>
+                            <button class="btn-success-light" style="flex: 1; padding: 10px; font-size: 0.8rem;" onclick="pagarRestanteOrcamento(${index})">💸 Quitar</button>
+                        ` : ''}
+                        <button class="btn-outline" style="padding: 10px 14px; font-size: 0.8rem;" onclick="editarOrcamento(${index})">✏️ Editar</button>
+                        <button class="btn-danger-light" style="padding: 10px 14px; font-size: 0.8rem;" onclick="removerItem(${index})">🗑️ Excluir</button>
+                    </div>
                 </div>`;
             });
 
