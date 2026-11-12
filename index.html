@@ -738,17 +738,27 @@
                         <div class="stat-note" id="dashConfirmadosSub">✓ 0 confirmados esta semana</div>
                     </div>
 
-                    <!-- CARTÃO ORÇAMENTO -->
+                    <!-- CARTÃO ORÇAMENTO (DETALHADO: TOTAL, PAGO E FALTA) -->
                     <div class="sub-card">
                         <div class="sub-card-top">
                             <div>
-                                <label>Orçamento</label>
-                                <div class="stat-value" id="dashGastos" style="font-size: 1.15rem;">R$ 0,00</div>
+                                <label>Orçamento Total</label>
+                                <div class="stat-value" id="dashGastos" style="font-size: 1.05rem;">R$ 0,00</div>
                             </div>
                             <div class="sub-card-icon">💰</div>
                         </div>
-                        <div>
-                            <div class="stat-note" id="dashOrcamentoPercentual" style="margin-bottom: 6px;">0% utilizado</div>
+                        <div style="display: flex; flex-direction: column; gap: 3px; font-size: 0.78rem; margin-top: 4px; border-top: 1px dashed var(--border-glass); padding-top: 6px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--text-muted);">Pago:</span>
+                                <strong id="dashValorPago" style="color: var(--success);">R$ 0,00</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--text-muted);">Falta:</span>
+                                <strong id="dashValorFalta" style="color: var(--warning);">R$ 0,00</strong>
+                            </div>
+                        </div>
+                        <div style="margin-top: 8px;">
+                            <div class="stat-note" id="dashOrcamentoPercentual" style="margin-bottom: 4px;">0% pago</div>
                             <div class="progress-bar-gold">
                                 <div class="progress-fill-gold" id="barraOrcamentoExec"></div>
                             </div>
@@ -1093,11 +1103,14 @@
 
             const totalGastos = orcamento.reduce((soma, item) => soma + Number(item.valor || 0), 0);
             const totalPago = orcamento.reduce((soma, item) => soma + Number(item.valorPago || 0), 0);
+            const valorFalta = totalGastos - totalPago;
 
             document.getElementById("dashGastos").innerText = totalGastos.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+            document.getElementById("dashValorPago").innerText = totalPago.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+            document.getElementById("dashValorFalta").innerText = valorFalta.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
             
             const percentualOrc = totalGastos > 0 ? Math.round((totalPago / totalGastos) * 100) : 0;
-            document.getElementById("dashOrcamentoPercentual").innerText = `${percentualOrc}% utilizado`;
+            document.getElementById("dashOrcamentoPercentual").innerText = `${percentualOrc}% pago`;
             document.getElementById("barraOrcamentoExec").style.width = percentualOrc + "%";
 
             const totalTarefas = checklist.length;
