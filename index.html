@@ -121,6 +121,18 @@
             --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* REGRA PARA CORRIGIR COR CLARA NOS PDFs */
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #111111 !important;
+            }
+            strong, p, li, h2 {
+                color: #111111 !important;
+                opacity: 1 !important;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -365,9 +377,7 @@
             margin-top: 2px;
         }
 
-        /* =========================================================
-           RESUMO EXECUTIVO ULTRA-LUXO (HIGH-END EDITORIAL STYLE)
-           ========================================================= */
+        /* RESUMO EXECUTIVO ULTRA-LUXO */
         .exec-card-haute {
             background: linear-gradient(145deg, var(--bg-glass), var(--primary-light));
             border-radius: 28px;
@@ -378,7 +388,6 @@
             overflow: hidden;
         }
 
-        /* Detalhe estético: Ornamento sutil no canto superior */
         .exec-card-haute::after {
             content: "✦";
             position: absolute;
@@ -428,7 +437,6 @@
             text-transform: uppercase;
         }
 
-        /* Grid de métricas refinadas */
         .exec-metrics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -491,7 +499,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* Divisor elegante em linha dupla ou tracejada fina */
         .metric-separator {
             height: 1px;
             background: var(--border-glass);
@@ -499,7 +506,6 @@
             width: 100%;
         }
 
-        /* Bloco de Tarefas minimalista */
         .tasks-cell-haute {
             background: var(--surface);
             border-radius: var(--radius-md);
@@ -550,7 +556,6 @@
             border-radius: 10px;
             transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        /* ========================================================= */
 
         .form-group {
             margin-bottom: 16px;
@@ -837,7 +842,7 @@
                 </div>
             </div>
 
-            <!-- RESUMO EXECUTIVO ULTRA-LUXO (HAUTE COUTURE EDITORIAL) -->
+            <!-- RESUMO EXECUTIVO ULTRA-LUXO -->
             <div class="exec-card-haute">
                 <div class="exec-header-haute">
                     <div class="exec-badge-gold">✨</div>
@@ -1434,12 +1439,13 @@
             const elemento = document.createElement("div");
             elemento.style.padding = "25px";
             elemento.style.fontFamily = "Arial, sans-serif";
+            elemento.style.color = "#111111"; // Força texto escuro no PDF
             elemento.innerHTML = `
-                <h2 style="color: #5c6e57; text-align: center; border-bottom: 2px solid #c5a880; padding-bottom: 10px;">${tituloRelatorio}</h2>
-                <p><strong>Data:</strong> ${casamento.data} | <strong>Local:</strong> ${casamento.local}</p>
-                <p><strong>Total:</strong> ${listaFiltrada.length}</p>
-                <ol style="padding-left: 20px; line-height: 1.6; margin-top: 15px;">
-                    ${listaFiltrada.map(c => `<li><strong>${c.nome}</strong></li>`).join('')}
+                <h2 style="color: #111111; text-align: center; border-bottom: 2px solid #c5a880; padding-bottom: 10px;">${tituloRelatorio}</h2>
+                <p style="color: #111111; margin-top: 10px;"><strong>Data:</strong> ${casamento.data} | <strong>Local:</strong> ${casamento.local}</p>
+                <p style="color: #111111;"><strong>Total:</strong> ${listaFiltrada.length}</p>
+                <ol style="padding-left: 20px; line-height: 1.6; margin-top: 15px; color: #111111;">
+                    ${listaFiltrada.map(c => `<li style="color: #111111; margin-bottom: 6px;"><strong>${c.nome}</strong></li>`).join('')}
                 </ol>
             `;
             html2pdf().set({ margin: 10, filename: `confirmados-${tipoEspecifico}.pdf` }).from(elemento).save();
@@ -1696,13 +1702,14 @@
             const elemento = document.createElement("div");
             elemento.style.padding = "30px";
             elemento.style.fontFamily = "Arial, sans-serif";
+            elemento.style.color = "#111111";
             elemento.innerHTML = `
-                <h1 style="color: #5c6e57; text-align: center; border-bottom: 2px solid #c5a880; padding-bottom: 10px;">Relatório Geral do Casamento</h1>
-                <p><strong>Data:</strong> ${casamento.data} | <strong>Local:</strong> ${casamento.local}</p>
-                <h3>Convidados</h3>
-                <p>Total: ${convidados.length} | Confirmados: ${confirmados}</p>
-                <h3>Orçamento</h3>
-                <p>Contratado: R$ ${totalGastos.toFixed(2)} | Pago: R$ ${totalPago.toFixed(2)}</p>
+                <h1 style="color: #111111; text-align: center; border-bottom: 2px solid #c5a880; padding-bottom: 10px;">Relatório Geral do Casamento</h1>
+                <p style="color: #111111; margin-top: 15px;"><strong>Data:</strong> ${casamento.data} | <strong>Local:</strong> ${casamento.local}</p>
+                <h3 style="color: #111111; margin-top: 15px;">Convidados</h3>
+                <p style="color: #111111;">Total: ${convidados.length} | Confirmados: ${confirmados}</p>
+                <h3 style="color: #111111; margin-top: 15px;">Orçamento</h3>
+                <p style="color: #111111;">Contratado: R$ ${totalGastos.toFixed(2)} | Pago: R$ ${totalPago.toFixed(2)}</p>
             `;
             html2pdf().set({ margin: 10, filename: `relatorio-casamento.pdf` }).from(elemento).save();
         }
